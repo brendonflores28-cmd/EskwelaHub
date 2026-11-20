@@ -7,6 +7,7 @@ use App\Contracts\OcrEngine;
 use App\Contracts\SentimentAnalyzer;
 use App\Listeners\RecordSessionEvent;
 use App\Services\Chatbot\FaqChatbot;
+use App\Services\Chatbot\LlmChatbot;
 use App\Services\Ocr\BrowserOcrEngine;
 use App\Services\Ocr\OcrSpaceEngine;
 use App\Services\Sentiment\LexiconSentimentAnalyzer;
@@ -39,7 +40,7 @@ class AppServiceProvider extends ServiceProvider
         // The OCR engine is chosen by OCR_DRIVER in .env (see config/ocr.php).
         // Swappable parts: replace these bindings to use an AI API (see config/sentiment.php, config/chatbot.php).
         $this->app->bind(SentimentAnalyzer::class, LexiconSentimentAnalyzer::class);
-        $this->app->bind(ChatbotResponder::class, FaqChatbot::class);
+        $this->app->bind(ChatbotResponder::class, fn ($app) => $app->make(config('chatbot.driver') === 'llm' ? LlmChatbot::class : FaqChatbot::class));
 
         $this->app->bind(OcrEngine::class, fn () => match (config('ocr.driver')) {
             'ocr_space' => new OcrSpaceEngine,

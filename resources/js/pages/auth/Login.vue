@@ -63,7 +63,7 @@ defineProps<{
                 <div class="flex items-center justify-between">
                     <Label for="password">Password</Label>
                     <TextLink
-                        v-if="canResetPassword"
+                        v-if="canResetPassword" data-tour="forgot-link"
                         :href="request()"
                         class="text-sm"
                         :tabindex="5"

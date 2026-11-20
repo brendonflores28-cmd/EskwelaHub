@@ -70,13 +70,13 @@ const yearOptions = props.schoolYears.map((y) => ({ value: y.id, label: y.label 
     <div class="flex flex-1 flex-col gap-4 p-4">
         <div class="flex items-center justify-between">
             <h1 class="text-2xl font-semibold">Student records</h1>
-            <Button as-child>
+            <Button as-child title="Add a student record by hand">
                 <Link href="/staff/students/create"><Plus class="size-4" /> New record</Link>
             </Button>
         </div>
 
         <div class="grid gap-2 md:grid-cols-4">
-            <Input v-model="q" placeholder="LRN or name (typos are OK)" autofocus />
+            <Input data-tour="student-search" v-model="q" placeholder="LRN or name (typos are OK)" autofocus />
             <NativeSelect v-model="schoolYear" :options="yearOptions" placeholder="All school years" />
             <NativeSelect v-model="grade" :options="grades" placeholder="All grades" />
             <NativeSelect v-model="status" :options="statuses" placeholder="All statuses" />

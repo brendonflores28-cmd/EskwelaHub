@@ -192,6 +192,6 @@ Student records are the most important data in the system.
 | **OCR (digitizing old records)** | The default engine, Tesseract.js, runs in the staff member's browser and downloads its language data from a public CDN the first time, so the staff computer needs internet. Nothing from the scan is sent to a third party. Set `OCR_DRIVER=ocr_space` and `OCR_SPACE_KEY` only if the school agrees to send scans to that service. |
 | **PDF fonts** | PDFs use the built-in Helvetica font, so they are small (about 5 to 20 KB). |
 | **Excel export** | Needs the PHP extensions `zip`, `xml` and `gd` (listed in section 0). If the download fails with a 500 error, check them in hPanel. |
-| **FAQ chatbot** | Answers live in the table `faq_entries`. The school must review them before go-live: fees, dates and office hours are intentionally not included. |
+| **FAQ chatbot** | Answers live in the table `faq_entries`. The school must review them before go-live: fees, dates and office hours are intentionally not included. To let a language model answer (optional, paid by the school): set `CHATBOT_DRIVER=llm` and `ANTHROPIC_API_KEY` in `.env`; only the typed question and the FAQ text are sent. |
 | **Private files** | Uploads, scans and PDFs are in `storage/app/private`. Include this folder in every backup (section 7) and never move it into `public`. |
 | **Unique job locks** | The PDF job uses a lock that expires after 5 minutes, so a crashed worker cannot block a request for ever. After 5 minutes the staff "Generate PDF again" button works again. |

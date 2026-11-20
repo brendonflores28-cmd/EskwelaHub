@@ -19,8 +19,8 @@ defineOptions({
     <div class="flex flex-1 flex-col gap-4 p-4">
         <div class="flex items-center justify-between">
             <h1 class="text-2xl font-semibold">Online enrollment</h1>
-            <Button as-child>
-                <Link href="/my-enrollments/create"><Plus class="size-4" /> New enrollment form</Link>
+            <Button as-child title="Enroll a learner online">
+                <Link href="/my-enrollments/create" data-tour="enroll-new-btn"><Plus class="size-4" /> New enrollment form</Link>
             </Button>
         </div>
 

@@ -90,7 +90,7 @@ function remove(): void {
                 </p>
             </div>
             <div class="flex gap-2 print:hidden">
-                <Button variant="outline" size="sm" @click="printList"><Printer class="size-4" /> Print class list</Button>
+                <Button variant="outline" size="sm" @click="printList" title="Print this class list"><Printer class="size-4" /> Print class list</Button>
                 <Button variant="outline" size="sm" as-child>
                     <Link :href="`/staff/sections?school_year_id=${section.school_year_id}`">All sections</Link>
                 </Button>
@@ -178,7 +178,7 @@ function remove(): void {
                     </div>
                     <div class="flex items-end gap-2">
                         <Button type="submit" size="sm" :disabled="edit.processing">Save</Button>
-                        <Button type="button" size="sm" variant="destructive" @click="remove">Delete section</Button>
+                        <Button type="button" size="sm" variant="destructive" @click="remove" title="Delete this section (only when empty)">Delete section</Button>
                     </div>
                 </form>
             </CardContent>

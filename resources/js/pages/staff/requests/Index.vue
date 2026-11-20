@@ -48,7 +48,7 @@ watch(status, search);
         </div>
 
         <div class="overflow-x-auto border">
-            <table class="w-full text-sm">
+            <table data-tour="requests-table" class="w-full text-sm">
                 <thead class="bg-muted/50 text-left">
                     <tr>
                         <th class="p-3">Request no.</th>

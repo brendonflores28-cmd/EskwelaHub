@@ -56,8 +56,8 @@ function review(id: number, action: 'approve' | 'reject'): void {
                         </td>
                         <td class="p-3">{{ l.requested_at }}</td>
                         <td class="flex gap-2 p-3">
-                            <Button size="sm" @click="review(l.id, 'approve')">Approve</Button>
-                            <Button size="sm" variant="outline" @click="review(l.id, 'reject')">Reject</Button>
+                            <Button size="sm" @click="review(l.id, 'approve')" title="Let this account see the student record">Approve</Button>
+                            <Button size="sm" variant="outline" @click="review(l.id, 'reject')" title="Do not give this account access">Reject</Button>
                         </td>
                     </tr>
                     <tr v-if="links.data.length === 0">

@@ -89,7 +89,7 @@ function archive(): void {
                 <Button variant="outline" size="sm" as-child>
                     <Link :href="`/staff/students/${s.id}/edit`"><Pencil class="size-4" /> Edit</Link>
                 </Button>
-                <Button variant="destructive" size="sm" @click="archive"><Trash2 class="size-4" /> Archive</Button>
+                <Button variant="destructive" size="sm" @click="archive" title="Hide this record from searches. It can be restored by the school"><Trash2 class="size-4" /> Archive</Button>
             </div>
         </div>
 

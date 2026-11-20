@@ -145,8 +145,8 @@ const pending = props.draft.status === 'pending';
                             <InputError :message="form.errors.general_average" />
                         </div>
                         <div class="flex flex-wrap gap-2 md:col-span-2">
-                            <Button type="submit" :disabled="form.processing">I checked it: save record</Button>
-                            <Button type="button" variant="outline" @click="router.post(`/staff/ocr/${draft.id}/reject`)">Discard</Button>
+                            <Button type="submit" :disabled="form.processing" title="Create the student record from these fields">I checked it: save record</Button>
+                            <Button type="button" variant="outline" @click="router.post(`/staff/ocr/${draft.id}/reject`)" title="Throw away this scan draft">Discard</Button>
                         </div>
                     </form>
                 </CardContent>

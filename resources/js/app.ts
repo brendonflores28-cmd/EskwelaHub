@@ -1,6 +1,6 @@
 import { createInertiaApp } from '@inertiajs/vue3';
 import { createApp } from 'vue';
-import ChatWidget from '@/components/ChatWidget.vue';
+import FloatingTools from '@/components/FloatingTools.vue';
 import { initializeTheme } from '@/composables/useAppearance';
 import AppLayout from '@/layouts/AppLayout.vue';
 import AuthLayout from '@/layouts/AuthLayout.vue';
@@ -48,4 +48,4 @@ initializeFlashToast();
 // It is its own small Vue app, so it stays in place while Inertia changes pages.
 const chatRoot = document.createElement('div');
 document.body.appendChild(chatRoot);
-createApp(ChatWidget).mount(chatRoot);
+createApp(FloatingTools).mount(chatRoot);

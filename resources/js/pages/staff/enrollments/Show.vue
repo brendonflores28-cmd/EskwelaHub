@@ -71,13 +71,13 @@ const sectionOptions = computed(() => props.sections.map((s) => ({ value: s.id, 
                     <InputError :message="decision.errors.section_id" />
                 </div>
                 <div class="flex flex-wrap gap-2">
-                    <Button v-if="a.status === 'submitted'" variant="outline" @click="router.post(`${base}/review`, {}, { preserveScroll: true })">
+                    <Button v-if="a.status === 'submitted'" variant="outline" @click="router.post(`${base}/review`, {}, { preserveScroll: true })" title="Mark the form as being reviewed">
                         Start review
                     </Button>
-                    <Button :disabled="decision.processing" @click="decision.post(`${base}/approve`, { preserveScroll: true })">
+                    <Button :disabled="decision.processing" @click="decision.post(`${base}/approve`, { preserveScroll: true })" title="Approve: creates the student record and links the parent">
                         Approve and create record
                     </Button>
-                    <Button variant="destructive" :disabled="decision.processing" @click="decision.post(`${base}/reject`, { preserveScroll: true })">
+                    <Button variant="destructive" :disabled="decision.processing" @click="decision.post(`${base}/reject`, { preserveScroll: true })" title="Reject. A note for the applicant is required">
                         Reject
                     </Button>
                 </div>

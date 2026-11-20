@@ -22,8 +22,8 @@ defineOptions({
             <div>
                 <h1 class="text-2xl font-semibold">Digitize old records</h1>
             </div>
-            <Button as-child>
-                <Link href="/staff/ocr/create"><Upload class="size-4" /> Upload a scan</Link>
+            <Button as-child title="Upload a scanned old record">
+                <Link href="/staff/ocr/create" data-tour="ocr-upload-btn"><Upload class="size-4" /> Upload a scan</Link>
             </Button>
         </div>
 

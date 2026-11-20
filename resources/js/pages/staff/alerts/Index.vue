@@ -35,7 +35,7 @@ function merge(flagId: number, keep: number, other: string): void {
             <div>
                 <h1 class="text-2xl font-semibold">Record alerts</h1>
             </div>
-            <Button variant="outline" @click="router.post('/staff/alerts/scan')"><ScanSearch class="size-4" /> Check now</Button>
+            <Button variant="outline" @click="router.post('/staff/alerts/scan')" title="Look for duplicate records right now"><ScanSearch class="size-4" /> Check now</Button>
         </div>
 
         <Card>
@@ -50,12 +50,12 @@ function merge(flagId: number, keep: number, other: string): void {
                             <div class="text-muted-foreground">
                                 {{ s.latest_enrollment ? `${s.latest_enrollment.school_year}, Grade ${s.latest_enrollment.grade_level}` : 'No enrollment' }}
                             </div>
-                            <Button size="sm" class="mt-2" @click="merge(d.id, s.id, i === 0 ? 'the left record' : 'the right record')">
+                            <Button size="sm" class="mt-2" @click="merge(d.id, s.id, i === 0 ? 'the left record' : 'the right record')" title="Merge both records into this one. Nothing is lost">
                                 Keep this one and merge
                             </Button>
                         </div>
                     </div>
-                    <Button size="sm" variant="outline" class="mt-2" @click="router.post(`/staff/alerts/${d.id}/dismiss`, {}, { preserveScroll: true })">
+                    <Button size="sm" variant="outline" class="mt-2" @click="router.post(`/staff/alerts/${d.id}/dismiss`, {}, { preserveScroll: true })" title="Close this alert: the two records are different learners">
                         They are different people
                     </Button>
                 </div>

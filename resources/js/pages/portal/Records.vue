@@ -60,7 +60,7 @@ function submit(): void {
                 <CardTitle>Link a student record</CardTitle>
             </CardHeader>
             <CardContent>
-                <form class="grid max-w-xl gap-3 md:grid-cols-3" @submit.prevent="submit">
+                <form data-tour="link-form" class="grid max-w-xl gap-3 md:grid-cols-3" @submit.prevent="submit">
                     <div class="grid gap-1">
                         <Label for="lrn">LRN</Label>
                         <Input id="lrn" v-model="form.lrn" inputmode="numeric" maxlength="12" required />
@@ -82,7 +82,7 @@ function submit(): void {
                     </div>
                     <div class="md:col-span-3">
                         <InputError :message="form.errors.lrn || form.errors.birthdate" />
-                        <Button type="submit" class="mt-2" :disabled="form.processing">Send request</Button>
+                        <Button type="submit" class="mt-2" :disabled="form.processing" title="Ask the registrar to link this record to your account">Send request</Button>
                     </div>
                 </form>
             </CardContent>

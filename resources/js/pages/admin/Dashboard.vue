@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { Head } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
 import { Download } from '@lucide/vue';
 import { computed } from 'vue';
 import BarChart from '@/components/BarChart.vue';
+import BarList from '@/components/BarList.vue';
+import Tip from '@/components/Tip.vue';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { dashboard } from '@/routes';
@@ -32,8 +34,7 @@ type Metrics = {
         sentiment: { positive: number; neutral: number; negative: number };
     };
     forecast: {
-        history: { label: string; count: number }[];
-        forecast: { label: string; predicted: number }[];
+        forecast: { label: string; start_year: number; predicted: number }[];
         slope: number;
         r2: number;
         enough_data: boolean;
@@ -44,141 +45,175 @@ type Metrics = {
 const props = defineProps<{ metrics: Metrics; canExport: boolean }>();
 
 defineOptions({
-    layout: { breadcrumbs: [{ title: 'Principal dashboard', href: dashboard() }] },
+    layout: { breadcrumbs: [{ title: 'Dashboard', href: dashboard() }] },
 });
 
 const k = computed(() => props.metrics.kpis);
+const current = computed(() => props.metrics.enrollment.find((y) => y.is_current));
+const short = (label: string) => `${label.slice(2, 4)}-${label.slice(7)}`; // "2025-2026" -> "25-26"
 
+// The five numbers a principal looks at first. Each opens the page behind it.
 const kpiCards = computed(() => [
-    { label: 'Student records', value: k.value.students },
-    { label: 'Enrolled this school year', value: k.value.enrolled_now },
-    { label: 'Graduates on file', value: k.value.graduates },
-    { label: 'Open document requests', value: k.value.open_requests },
-    { label: 'Average days to release', value: k.value.avg_processing_days ?? '-' },
-    { label: 'Survey average (1 to 5)', value: props.metrics.satisfaction.responses ? props.metrics.satisfaction.overall : '-' },
+    { label: 'Student records', value: k.value.students, href: '/staff/students', tip: 'All learner records, past and present. Click to search them.' },
+    { label: 'Enrolled this year', value: k.value.enrolled_now, href: '/staff/sections', tip: `Learners enrolled in ${k.value.school_year ?? 'the current school year'}. Click to see the class sections.` },
+    { label: 'Graduates on file', value: k.value.graduates, href: '/staff/students?status=graduated', tip: 'Learners marked as graduated. Click to list them.' },
+    { label: 'Open requests', value: k.value.open_requests, href: '/staff/requests', tip: 'Document requests not finished yet. Click to process them.' },
+    {
+        label: 'Satisfaction (1 to 5)',
+        value: props.metrics.satisfaction.responses ? props.metrics.satisfaction.overall : '-',
+        href: '/admin/surveys',
+        tip: 'Average rating from the surveys after each request or enrollment.',
+    },
 ]);
 
-const enrollmentItems = computed(() =>
-    props.metrics.enrollment.map((e) => ({ label: e.label.slice(2), value: e.count, highlight: e.is_current })),
+/**
+ * ONE enrollment chart: finished school years, this year, and the forecast for the next two years.
+ * (The forecast for this year is in the bar's hover text, so no year is drawn twice.)
+ */
+const enrollmentItems = computed(() => {
+    const finished = props.metrics.enrollment
+        .filter((y) => !y.is_current && (!current.value || y.start_year < current.value.start_year))
+        .slice(-10);
+    const items: { label: string; value: number; kind: 'actual' | 'current' | 'forecast'; hint: string }[] = finished.map((y) => ({
+        label: short(y.label),
+        value: y.count,
+        kind: 'actual',
+        hint: `${y.label}: ${y.count} learners`,
+    }));
+
+    if (current.value) {
+        const expected = props.metrics.forecast.forecast.find((f) => f.start_year === current.value!.start_year)?.predicted;
+        items.push({
+            label: short(current.value.label),
+            value: current.value.count,
+            kind: 'current',
+            hint: `${current.value.label} (this year): ${current.value.count} enrolled so far${expected ? `, forecast ${expected}` : ''}`,
+        });
+    }
+
+    for (const f of props.metrics.forecast.forecast.filter((f) => !current.value || f.start_year > current.value.start_year)) {
+        items.push({ label: short(f.label), value: f.predicted, kind: 'forecast', hint: `${f.label}: about ${f.predicted} learners (forecast)` });
+    }
+
+    return items;
+});
+
+const graduateItems = computed(() =>
+    props.metrics.graduates.slice(-10).map((g) => ({ label: short(g.label), value: g.count, kind: 'actual' as const, hint: `${g.label}: ${g.count} graduates` })),
 );
-const strandItems = computed(() => props.metrics.strands.map((s) => ({ label: s.label, value: s.total })));
-const graduateItems = computed(() => props.metrics.graduates.map((g) => ({ label: g.label.slice(2), value: g.count })));
-const statusItems = computed(() => props.metrics.requests.by_status.map((s) => ({ label: s.label, value: s.count })));
-const monthItems = computed(() => props.metrics.requests.by_month.map((m) => ({ label: m.month.slice(2), value: m.count })));
-const forecastItems = computed(() => [
-    ...props.metrics.forecast.history.map((h) => ({ label: h.label.slice(2), value: h.count })),
-    ...props.metrics.forecast.forecast.map((f) => ({ label: f.label.slice(2), value: f.predicted, projected: true })),
-]);
+const monthItems = computed(() =>
+    props.metrics.requests.by_month.map((m) => ({ label: m.month.slice(5) + '/' + m.month.slice(2, 4), value: m.count, kind: 'actual' as const, hint: `${m.month}: ${m.count} requests` })),
+);
+const statusRows = computed(() => props.metrics.requests.by_status.filter((s) => s.count > 0).map((s) => ({ label: s.label, value: s.count })));
+const strandRows = computed(() =>
+    props.metrics.strands.map((s) => ({ label: s.label, value: s.total, hint: `${s.label}: Grade 11 ${s.grade11}, Grade 12 ${s.grade12}` })),
+);
 
-const sentiment = computed(() => props.metrics.satisfaction.sentiment);
-const sentimentTotal = computed(() => Math.max(1, sentiment.value.positive + sentiment.value.neutral + sentiment.value.negative));
-const pct = (n: number) => Math.round((n / sentimentTotal.value) * 100);
+const s = computed(() => props.metrics.satisfaction);
+const ratingRows = computed(() => [
+    { label: 'Overall', value: s.value.overall },
+    { label: 'Speed of service', value: s.value.speed },
+    { label: 'Staff courtesy', value: s.value.staff },
+]);
+const sentimentRows = computed(() => [
+    { label: 'Positive', value: s.value.sentiment.positive, tone: 'good' as const },
+    { label: 'Neutral', value: s.value.sentiment.neutral, tone: 'neutral' as const },
+    { label: 'Negative', value: s.value.sentiment.negative, tone: 'bad' as const },
+]);
 </script>
 
 <template>
-    <Head title="Principal dashboard" />
+    <Head title="Dashboard" />
 
-    <div class="flex flex-1 flex-col gap-6 p-4">
-        <div class="flex flex-wrap items-start justify-between gap-2">
+    <div class="flex flex-1 flex-col gap-5 p-4">
+        <div class="flex flex-wrap items-end justify-between gap-2">
             <div>
                 <h1 class="text-2xl font-semibold">Principal dashboard</h1>
-                <p class="text-sm text-muted-foreground">School year {{ k.school_year ?? '-' }} - updated {{ metrics.generated_at }}</p>
+                <p class="text-sm text-muted-foreground">School year {{ k.school_year ?? '-' }}</p>
             </div>
-            <Button v-if="canExport" as-child>
-                <a href="/admin/dashboard/export"><Download class="size-4" /> Export to Excel</a>
-            </Button>
+            <Tip v-if="canExport" text="Download all these numbers as an Excel file">
+                <Button as-child data-tour="export">
+                    <a href="/admin/dashboard/export"><Download class="size-4" /> Export to Excel</a>
+                </Button>
+            </Tip>
         </div>
 
-        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
-            <Card v-for="c in kpiCards" :key="c.label">
-                <CardHeader>
-                    <CardDescription>{{ c.label }}</CardDescription>
-                    <CardTitle class="text-3xl">{{ c.value }}</CardTitle>
-                </CardHeader>
-            </Card>
+        <!-- The five numbers to read first -->
+        <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-5" data-tour="kpis">
+            <Tip v-for="c in kpiCards" :key="c.label" :text="c.tip">
+                <Link :href="c.href" class="block border bg-card p-4 transition hover:border-primary">
+                    <div class="text-sm text-muted-foreground">{{ c.label }}</div>
+                    <div class="mt-1 font-serif text-3xl font-bold">{{ c.value }}</div>
+                </Link>
+            </Tip>
         </div>
 
-        <Card>
+        <!-- One chart for enrollment: past years, this year and the forecast -->
+        <Card data-tour="enrollment-chart">
             <CardHeader>
-                <CardTitle>Enrollment forecast</CardTitle>
-                <CardDescription>Dashed bars are the forecast.</CardDescription>
+                <CardTitle>Enrollment per school year</CardTitle>
+                <CardDescription class="flex flex-wrap items-center gap-x-4 gap-y-1">
+                    <span class="flex items-center gap-1.5"><i class="inline-block size-3 bg-[color-mix(in_oklab,var(--primary)_62%,white)]"></i> Finished years</span>
+                    <span class="flex items-center gap-1.5"><i class="inline-block size-3 bg-primary"></i> This year</span>
+                    <span v-if="metrics.forecast.enough_data" class="flex items-center gap-1.5"><i class="inline-block size-3 border border-dashed border-primary bg-primary/25"></i> Forecast</span>
+                </CardDescription>
             </CardHeader>
-            <CardContent class="space-y-3">
-                <BarChart v-if="metrics.forecast.enough_data" :items="forecastItems" />
-                <p class="text-sm text-muted-foreground">{{ metrics.forecast.note }}</p>
-                <p v-if="metrics.forecast.enough_data" class="text-sm">
-                    Trend: {{ metrics.forecast.slope >= 0 ? '+' : '' }}{{ metrics.forecast.slope }} learners per year
-                    (fit quality R&sup2; = {{ metrics.forecast.r2 }}; closer to 1 means the line follows the past well).
+            <CardContent>
+                <BarChart :items="enrollmentItems" />
+                <p v-if="metrics.forecast.enough_data" class="mt-3 text-xs text-muted-foreground">
+                    Trend {{ metrics.forecast.slope >= 0 ? '+' : '' }}{{ metrics.forecast.slope }} learners a year. {{ metrics.forecast.note }}
                 </p>
+                <p v-else class="mt-3 text-xs text-muted-foreground">{{ metrics.forecast.note }}</p>
             </CardContent>
         </Card>
 
-        <div class="grid gap-4 lg:grid-cols-2">
+        <div class="grid gap-5 lg:grid-cols-2">
             <Card>
-                <CardHeader>
-                    <CardTitle>Enrollment per school year</CardTitle>
-                </CardHeader>
-                <CardContent><BarChart :items="enrollmentItems" /></CardContent>
-            </Card>
-
-            <Card>
-                <CardHeader>
-                    <CardTitle>Graduates per school year</CardTitle>
-                </CardHeader>
+                <CardHeader><CardTitle>Graduates per school year</CardTitle></CardHeader>
                 <CardContent>
                     <BarChart v-if="graduateItems.length" :items="graduateItems" />
-                    <p v-else class="text-sm text-muted-foreground">No graduation data yet.</p>
+                    <p v-else class="text-sm text-muted-foreground">No graduates recorded yet.</p>
                 </CardContent>
             </Card>
 
             <Card>
-                <CardHeader>
-                    <CardTitle>Senior high by strand</CardTitle>
-                </CardHeader>
+                <CardHeader><CardTitle>Document requests per month</CardTitle></CardHeader>
+                <CardContent><BarChart :items="monthItems" :height="170" /></CardContent>
+            </Card>
+
+            <Card>
+                <CardHeader><CardTitle>Requests by status</CardTitle></CardHeader>
                 <CardContent>
-                    <BarChart v-if="strandItems.length" :items="strandItems" />
-                    <p v-else class="text-sm text-muted-foreground">No senior high learners with a strand yet.</p>
+                    <BarList v-if="statusRows.length" :rows="statusRows" />
+                    <p v-else class="text-sm text-muted-foreground">No requests yet.</p>
                 </CardContent>
             </Card>
 
             <Card>
-                <CardHeader><CardTitle>Document requests by status</CardTitle></CardHeader>
-                <CardContent><BarChart :items="statusItems" /></CardContent>
-            </Card>
-
-            <Card>
-                <CardHeader>
-                    <CardTitle>Document requests per month (last 12 months)</CardTitle>
-                </CardHeader>
-                <CardContent><BarChart :items="monthItems" /></CardContent>
+                <CardHeader><CardTitle>Senior high by strand</CardTitle></CardHeader>
+                <CardContent>
+                    <BarList v-if="strandRows.length" :rows="strandRows" />
+                    <p v-else class="text-sm text-muted-foreground">No senior high learners yet.</p>
+                </CardContent>
             </Card>
         </div>
 
         <Card>
             <CardHeader>
                 <CardTitle>Client satisfaction</CardTitle>
-                <CardDescription>{{ metrics.satisfaction.responses }} survey responses.</CardDescription>
+                <CardDescription>{{ s.responses }} survey {{ s.responses === 1 ? 'answer' : 'answers' }}</CardDescription>
             </CardHeader>
-            <CardContent class="grid gap-4 md:grid-cols-2">
-                <div class="space-y-1 text-sm">
-                    <div>Overall: <strong>{{ metrics.satisfaction.overall }}</strong> / 5</div>
-                    <div>Speed of service: <strong>{{ metrics.satisfaction.speed }}</strong> / 5</div>
-                    <div>Staff courtesy: <strong>{{ metrics.satisfaction.staff }}</strong> / 5</div>
+            <CardContent v-if="s.responses" class="grid gap-6 md:grid-cols-2">
+                <div>
+                    <h3 class="mb-2 text-sm font-medium">Ratings (out of 5)</h3>
+                    <BarList :rows="ratingRows" :max="5" />
                 </div>
-                <div class="space-y-2 text-sm">
-                    <div class="text-muted-foreground">What people wrote (sentiment of comments)</div>
-                    <div class="flex h-4 overflow-hidden bg-muted" role="img" :aria-label="`Positive ${pct(sentiment.positive)}%, neutral ${pct(sentiment.neutral)}%, negative ${pct(sentiment.negative)}%`">
-                        <div class="bg-green-600" :style="{ width: pct(sentiment.positive) + '%' }"></div>
-                        <div class="bg-gray-400" :style="{ width: pct(sentiment.neutral) + '%' }"></div>
-                        <div class="bg-red-600" :style="{ width: pct(sentiment.negative) + '%' }"></div>
-                    </div>
-                    <div class="flex gap-4">
-                        <span>Positive {{ sentiment.positive }}</span>
-                        <span>Neutral {{ sentiment.neutral }}</span>
-                        <span>Negative {{ sentiment.negative }}</span>
-                    </div>
+                <div>
+                    <h3 class="mb-2 text-sm font-medium">Comments</h3>
+                    <BarList :rows="sentimentRows" />
                 </div>
             </CardContent>
+            <CardContent v-else class="text-sm text-muted-foreground">No survey answers yet.</CardContent>
         </Card>
     </div>
 </template>

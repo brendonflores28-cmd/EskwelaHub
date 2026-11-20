@@ -19,13 +19,13 @@ defineOptions({
     <div class="flex flex-1 flex-col gap-4 p-4">
         <div class="flex items-center justify-between">
             <h1 class="text-2xl font-semibold">My document requests</h1>
-            <Button as-child>
-                <Link href="/my-requests/create"><Plus class="size-4" /> New request</Link>
+            <Button as-child title="Ask for a document">
+                <Link href="/my-requests/create" data-tour="new-request-btn"><Plus class="size-4" /> New request</Link>
             </Button>
         </div>
 
         <div class="overflow-x-auto border">
-            <table class="w-full text-sm">
+            <table data-tour="requests-table" class="w-full text-sm">
                 <thead class="bg-muted/50 text-left">
                     <tr>
                         <th class="p-3">Request no.</th>

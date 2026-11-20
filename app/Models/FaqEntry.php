@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $answer
  * @property bool $is_active
  */
-#[Fillable(['category', 'question', 'keywords', 'answer', 'is_active', 'sort'])]
+#[Fillable(['category', 'question', 'question_tl', 'keywords', 'answer', 'answer_tl', 'guide', 'is_active', 'sort'])]
 class FaqEntry extends Model
 {
     protected function casts(): array

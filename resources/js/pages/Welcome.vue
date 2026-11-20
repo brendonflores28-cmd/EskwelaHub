@@ -55,8 +55,8 @@ const steps = [
                         Dashboard
                     </Link>
                     <template v-else>
-                        <Link :href="login()" class="ml-2 border px-4 py-2 font-medium hover:bg-muted">Log in</Link>
-                        <Link :href="register()" class="bg-primary px-4 py-2 font-medium text-primary-foreground hover:opacity-90">Register</Link>
+                        <Link data-tour="home-login" :href="login()" class="ml-2 border px-4 py-2 font-medium hover:bg-muted">Log in</Link>
+                        <Link data-tour="home-register" :href="register()" class="bg-primary px-4 py-2 font-medium text-primary-foreground hover:opacity-90">Register</Link>
                     </template>
                 </div>
             </nav>

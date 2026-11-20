@@ -84,7 +84,7 @@ const onRegister = computed(() => path.value === '/register');
                     <p v-if="description" class="text-sm text-muted-foreground">{{ description }}</p>
                 </div>
 
-                <div class="mt-6">
+                <div class="mt-6" data-tour="auth-form">
                     <slot />
                 </div>
             </div>

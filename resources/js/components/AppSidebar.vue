@@ -28,39 +28,39 @@ const mainNavItems = computed<NavItem[]>(() => {
     const items: NavItem[] = [{ title: 'Dashboard', href: dashboard(), icon: LayoutGrid }];
 
     if (can.viewStudents) {
-        items.push({ title: 'Student records', href: '/staff/students', icon: GraduationCap });
+        items.push({ title: 'Student records', href: '/staff/students', icon: GraduationCap, tour: 'nav-records' });
     }
     if (can.viewStudents) {
-        items.push({ title: 'Class sections', href: '/staff/sections', icon: LayoutList });
+        items.push({ title: 'Class sections', href: '/staff/sections', icon: LayoutList, tour: 'nav-sections' });
     }
     if (can.processRequests) {
-        items.push({ title: 'Document requests', href: '/staff/requests', icon: FileText });
+        items.push({ title: 'Document requests', href: '/staff/requests', icon: FileText, tour: 'nav-requests' });
     }
     if (can.reviewEnrollments) {
-        items.push({ title: 'Enrollment forms', href: '/staff/enrollments', icon: UserPlus });
+        items.push({ title: 'Enrollment forms', href: '/staff/enrollments', icon: UserPlus, tour: 'nav-enrollments' });
     }
     if (can.useOcr) {
-        items.push({ title: 'Digitize records', href: '/staff/ocr', icon: ScanLine });
+        items.push({ title: 'Digitize records', href: '/staff/ocr', icon: ScanLine, tour: 'nav-ocr' });
     }
     if (can.reviewLinks) {
-        items.push({ title: 'Account link approvals', href: '/staff/links', icon: UserCheck });
+        items.push({ title: 'Account link approvals', href: '/staff/links', icon: UserCheck, tour: 'nav-links' });
     }
     if (can.viewStudents) {
-        items.push({ title: 'Record alerts', href: '/staff/alerts', icon: TriangleAlert });
+        items.push({ title: 'Record alerts', href: '/staff/alerts', icon: TriangleAlert, tour: 'nav-alerts' });
     }
     if (can.viewSurveys) {
-        items.push({ title: 'Surveys', href: '/admin/surveys', icon: MessageSquareText });
+        items.push({ title: 'Surveys', href: '/admin/surveys', icon: MessageSquareText, tour: 'nav-surveys' });
     }
     if (can.viewAudit) {
-        items.push({ title: 'Audit trail', href: '/admin/audit-log', icon: ScrollText });
+        items.push({ title: 'Audit trail', href: '/admin/audit-log', icon: ScrollText, tour: 'nav-audit' });
     }
     if (can.viewSessions) {
-        items.push({ title: 'Session logs', href: '/admin/session-logs', icon: KeyRound });
+        items.push({ title: 'Session logs', href: '/admin/session-logs', icon: KeyRound, tour: 'nav-sessions' });
     }
     if (!can.viewStudents) {
-        items.push({ title: 'My records', href: '/my-records', icon: ClipboardList });
-        items.push({ title: 'My requests', href: '/my-requests', icon: FileText });
-        items.push({ title: 'Enrollment', href: '/my-enrollments', icon: UserPlus });
+        items.push({ title: 'My records', href: '/my-records', icon: ClipboardList, tour: 'nav-records' });
+        items.push({ title: 'My requests', href: '/my-requests', icon: FileText, tour: 'nav-requests' });
+        items.push({ title: 'Enrollment', href: '/my-enrollments', icon: UserPlus, tour: 'nav-enrollment' });
     }
 
     return items;

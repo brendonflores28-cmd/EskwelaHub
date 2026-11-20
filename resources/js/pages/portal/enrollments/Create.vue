@@ -62,7 +62,7 @@ function submit(): void {
 
         <p v-if="!schoolYear" class="border p-4 text-sm">Enrollment is not open right now.</p>
 
-        <form v-else class="grid gap-4 md:grid-cols-2" @submit.prevent="submit">
+        <form v-else data-tour="enroll-form" class="grid gap-4 md:grid-cols-2" @submit.prevent="submit">
             <div class="grid gap-2">
                 <Label>Type</Label>
                 <NativeSelect v-model="form.type" :options="types" />

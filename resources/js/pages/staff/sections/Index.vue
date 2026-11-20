@@ -72,7 +72,7 @@ function save(): void {
                         <Badge v-if="g.unassigned > 0" variant="secondary" class="ml-2">{{ g.unassigned }} without a section</Badge>
                     </CardDescription>
                 </div>
-                <Button v-if="canManage" size="sm" variant="outline" @click="openAdd(g.grade)"><Plus class="size-4" /> Add section</Button>
+                <Button data-tour="section-add" v-if="canManage" size="sm" variant="outline" @click="openAdd(g.grade)" title="Create a new class section in this grade"><Plus class="size-4" /> Add section</Button>
             </CardHeader>
             <CardContent class="space-y-3">
                 <form v-if="adding === g.grade" class="grid gap-3 border p-3 md:grid-cols-4" @submit.prevent="save">

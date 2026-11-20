@@ -29,7 +29,7 @@ watch(status, () => router.get('/staff/enrollments', { status: status.value || u
         <div class="max-w-xs"><NativeSelect v-model="status" :options="statuses" placeholder="All statuses" /></div>
 
         <div class="overflow-x-auto border">
-            <table class="w-full text-sm">
+            <table data-tour="enrollments-table" class="w-full text-sm">
                 <thead class="bg-muted/50 text-left">
                     <tr>
                         <th class="p-3">Reference</th>

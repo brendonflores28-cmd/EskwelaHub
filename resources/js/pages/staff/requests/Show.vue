@@ -82,15 +82,15 @@ function approve(): void {
                 </div>
 
                 <div class="flex flex-wrap gap-2">
-                    <Button v-if="can('under_review')" variant="outline" @click="post('review')">Start review</Button>
-                    <Button v-if="can('approved')" :disabled="decision.processing" @click="approve">
+                    <Button v-if="can('under_review')" variant="outline" @click="post('review')" title="Mark the request as being reviewed">Start review</Button>
+                    <Button v-if="can('approved')" :disabled="decision.processing" @click="approve" title="Approve it and create the PDF document">
                         Approve and generate PDF
                     </Button>
-                    <Button v-if="can('rejected')" variant="destructive" :disabled="decision.processing" @click="reject">
+                    <Button v-if="can('rejected')" variant="destructive" :disabled="decision.processing" @click="reject" title="Reject it. A note for the requester is required">
                         Reject
                     </Button>
-                    <Button v-if="can('released')" @click="post('release')">Release to requester</Button>
-                    <Button v-if="canRegenerate" variant="outline" @click="post('regenerate')">
+                    <Button v-if="can('released')" @click="post('release')" title="Let the requester download the document">Release to requester</Button>
+                    <Button v-if="canRegenerate" variant="outline" @click="post('regenerate')" title="Run the PDF creation again">
                         Generate PDF again
                     </Button>
                     <Button v-if="canDownload" variant="outline" as-child>

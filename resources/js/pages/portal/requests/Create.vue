@@ -35,7 +35,7 @@ const copyOptions = [1, 2, 3, 4, 5].map((n) => ({ value: n, label: String(n) }))
             <Link href="/my-records" class="underline">Link a record</Link> and wait for the registrar to approve it.
         </p>
 
-        <form v-else class="grid gap-4" @submit.prevent="form.post('/my-requests')">
+        <form v-else data-tour="request-form" class="grid gap-4" @submit.prevent="form.post('/my-requests')">
             <div class="grid gap-2">
                 <Label>Learner</Label>
                 <NativeSelect v-model="form.student_id" :options="studentOptions" />

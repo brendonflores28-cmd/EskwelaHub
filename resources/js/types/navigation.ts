@@ -11,4 +11,6 @@ export type NavItem = {
     href: NonNullable<InertiaLinkProps['href']>;
     icon?: LucideIcon;
     isActive?: boolean;
+    /** data-tour name, so the guided tour can highlight this menu item. */
+    tour?: string;
 };
