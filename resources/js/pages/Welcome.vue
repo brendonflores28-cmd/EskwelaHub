@@ -76,8 +76,8 @@ const steps = [
             <div class="absolute inset-0 -z-10 bg-gradient-to-r from-[#0a4d1a]/92 via-[#0d6b25]/72 to-[#0d6b25]/38"></div>
             <div class="absolute inset-x-0 bottom-0 -z-10 h-32 bg-gradient-to-t from-[#06330f]/80 to-transparent"></div>
 
-            <div class="mx-auto grid max-w-6xl items-center gap-10 px-4 py-16 md:grid-cols-[1.4fr_1fr] md:py-24">
-                <div>
+            <div class="mx-auto max-w-6xl px-4 py-20 md:py-32">
+                <div class="max-w-2xl">
                     <p class="mb-4 flex items-center gap-3 text-xs font-semibold tracking-[0.2em] text-[#f1d36a] uppercase">
                         <span class="h-px w-10 bg-gold"></span> Office of the Registrar
                     </p>
@@ -94,13 +94,6 @@ const steps = [
                             Request a Document
                         </Link>
                     </div>
-                </div>
-                <div class="flex justify-center md:justify-end">
-                    <img
-                        src="/images/cnhs-logo.png"
-                        :alt="`Official seal of ${school.name}`"
-                        class="size-52 drop-shadow-[0_10px_30px_rgba(0,0,0,0.45)] md:size-72"
-                    />
                 </div>
             </div>
         </section>
