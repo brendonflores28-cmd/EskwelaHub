@@ -36,14 +36,6 @@ const steps = [
     </Head>
 
     <div class="min-h-screen bg-background text-foreground">
-        <!-- Official strip -->
-        <div class="bg-[#0d4a1c] text-[11px] tracking-wide text-white/85 uppercase">
-            <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-6 gap-y-1 px-4 py-1.5">
-                <span>Republic of the Philippines &middot; Department of Education</span>
-                <span>{{ school.district }} &middot; School ID {{ school.school_id }}</span>
-            </div>
-        </div>
-        <div class="h-1 bg-gold"></div>
 
         <!-- Header -->
         <header class="border-b bg-background">
@@ -135,53 +127,50 @@ const steps = [
             </div>
         </section>
 
-        <!-- Contact -->
-        <section id="contact" class="mx-auto max-w-6xl px-4 py-16">
-            <div class="mb-8 text-center">
-                <p class="text-xs font-semibold tracking-[0.2em] text-primary uppercase">Visit or write to us</p>
-                <h2 class="mt-2 font-serif text-3xl font-bold">Contact the School</h2>
-                <div class="mx-auto mt-3 h-px w-24 bg-gold"></div>
-            </div>
-            <div class="grid gap-5 md:grid-cols-3">
-                <div class="flex gap-4 rounded-sm border bg-card p-6">
-                    <MapPin class="mt-1 size-6 shrink-0 text-primary" />
-                    <div class="text-sm">
-                        <div class="font-serif text-base font-bold">Address</div>
-                        <div class="mt-1 text-muted-foreground">{{ school.name }}<br />{{ school.address }}</div>
-                    </div>
-                </div>
-                <div class="flex gap-4 rounded-sm border bg-card p-6">
-                    <Phone class="mt-1 size-6 shrink-0 text-primary" />
-                    <div class="text-sm">
-                        <div class="font-serif text-base font-bold">Mobile</div>
-                        <a :href="`tel:${school.phone.replace(/\s/g, '')}`" class="mt-1 block text-muted-foreground hover:underline">{{ school.phone }}</a>
-                    </div>
-                </div>
-                <div class="flex gap-4 rounded-sm border bg-card p-6">
-                    <Mail class="mt-1 size-6 shrink-0 text-primary" />
-                    <div class="text-sm">
-                        <div class="font-serif text-base font-bold">Email</div>
-                        <a :href="`mailto:${school.email}`" class="mt-1 block text-muted-foreground hover:underline">{{ school.email }}</a>
-                        <a :href="school.facebook" target="_blank" rel="noopener" class="mt-1 block text-primary hover:underline">Official Facebook page</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Footer -->
-        <footer class="bg-[#0d4a1c] text-white/85">
+        <!-- Footer: uses the full width, no logo -->
+        <footer id="contact" class="bg-[#0d4a1c] text-white/85">
             <div class="h-1 bg-gold"></div>
-            <div class="mx-auto grid max-w-6xl gap-8 px-4 py-10 md:grid-cols-[auto_1fr_1fr]">
-                <img src="/images/cnhs-logo-96.png" srcset="/images/cnhs-logo-96.png 1x, /images/cnhs-logo-256.png 2x" alt="" class="size-16" />
+            <div class="mx-auto grid max-w-6xl gap-x-10 gap-y-8 px-4 py-12 sm:grid-cols-2 lg:grid-cols-4">
+                <div>
+                    <h2 class="font-serif text-lg font-bold text-white">{{ school.name }}</h2>
+                    <p class="mt-1 text-xs tracking-wide text-white/60 uppercase">Republic of the Philippines &middot; Department of Education</p>
+                    <p class="mt-3 text-sm">{{ school.district }}<br />School ID {{ school.school_id }}</p>
+                </div>
+
+                <div class="space-y-3 text-sm">
+                    <h3 class="font-serif text-base font-bold text-white">Contact</h3>
+                    <p class="flex gap-2"><MapPin class="mt-0.5 size-4 shrink-0 text-gold" /> {{ school.address }}</p>
+                    <p class="flex gap-2">
+                        <Phone class="mt-0.5 size-4 shrink-0 text-gold" />
+                        <a :href="`tel:${school.phone.replace(/\s/g, '')}`" class="hover:underline">{{ school.phone }}</a>
+                    </p>
+                    <p class="flex gap-2">
+                        <Mail class="mt-0.5 size-4 shrink-0 text-gold" />
+                        <a :href="`mailto:${school.email}`" class="break-all hover:underline">{{ school.email }}</a>
+                    </p>
+                </div>
+
                 <div class="text-sm">
-                    <div class="font-serif text-lg font-bold text-white">{{ school.name }}</div>
-                    <div>{{ school.address }}</div>
-                    <div>{{ school.district }} &middot; School ID {{ school.school_id }}</div>
+                    <h3 class="font-serif text-base font-bold text-white">Portal</h3>
+                    <ul class="mt-3 space-y-2">
+                        <li><Link :href="page.props.auth.user ? '/my-enrollments/create' : register()" class="hover:underline">Enroll online</Link></li>
+                        <li><Link :href="page.props.auth.user ? '/my-requests/create' : login()" class="hover:underline">Request a document</Link></li>
+                        <li><a href="#process" class="hover:underline">How it works</a></li>
+                        <li><a :href="school.facebook" target="_blank" rel="noopener" class="hover:underline">Official Facebook page</a></li>
+                    </ul>
                 </div>
-                <div class="flex items-start gap-2 text-xs text-white/70">
-                    <GraduationCap class="mt-0.5 size-4 shrink-0" />
-                    <p>Established by {{ school.established_by }}. Personal information is handled under the Data Privacy Act of 2012 (RA 10173).</p>
+
+                <div class="text-sm">
+                    <h3 class="font-serif text-base font-bold text-white">About</h3>
+                    <p class="mt-3 flex gap-2 text-white/75">
+                        <GraduationCap class="mt-0.5 size-4 shrink-0 text-gold" />
+                        <span>Established by {{ school.established_by }}.</span>
+                    </p>
+                    <p class="mt-2 text-white/75">Personal information is handled under the Data Privacy Act of 2012 (RA 10173).</p>
                 </div>
+            </div>
+            <div class="border-t border-white/15">
+                <div class="mx-auto max-w-6xl px-4 py-4 text-xs text-white/60">&copy; {{ new Date().getFullYear() }} {{ page.props.name }} &middot; {{ school.name }}</div>
             </div>
         </footer>
     </div>
