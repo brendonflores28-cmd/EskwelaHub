@@ -30,6 +30,11 @@ class SchoolYear extends Model
         return $this->hasMany(StudentEnrollment::class);
     }
 
+    public function graduations(): HasMany
+    {
+        return $this->hasMany(Graduation::class);
+    }
+
     /** Build the label ("2026-2027") for the school year that starts in $startYear. */
     public static function labelFor(int $startYear): string
     {

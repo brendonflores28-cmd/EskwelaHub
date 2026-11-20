@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AuditLogController;
+use App\Http\Controllers\Admin\ReportExportController;
 use App\Http\Controllers\Admin\SurveyController as AdminSurveyController;
 use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\DashboardController;
@@ -143,6 +144,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->prefix('admin')->name('admin.')->group(function () {
             Route::get('audit-log', [AuditLogController::class, 'index'])->name('audit-log');
         });
+
+    Route::middleware(['permission:reports.export', 'two-factor'])
+        ->get('admin/dashboard/export', ReportExportController::class)
+        ->name('admin.dashboard.export');
 
     Route::middleware(['permission:surveys.view', 'two-factor'])
         ->prefix('admin')->name('admin.')->group(function () {
