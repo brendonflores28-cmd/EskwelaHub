@@ -66,7 +66,7 @@
                     @forelse ($rows as $e)
                         <tr>
                             <td>{{ $e->schoolYear?->label }}</td>
-                            <td>{{ $e->grade_level }}</td>
+                            <td>{{ $e->grade_level }}@if ($e->strand) - {{ $e->strand->short() }}@endif</td>
                             <td>{{ $e->section?->name ?? '-' }}</td>
                             <td>{{ $e->general_average ?? '-' }}</td>
                             <td>{{ ucfirst($e->status->value) }}</td>

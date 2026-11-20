@@ -41,6 +41,8 @@ class DashboardExport implements Export, WithMultipleSheets
                 ...array_map(fn ($r) => ['Status: '.$r['label'], $r['count']], $m['requests']['by_status']),
                 ...array_map(fn ($r) => ['Month: '.$r['month'], $r['count']], $m['requests']['by_month']),
             ]),
+            new ArraySheet('Senior high', ['Strand', 'Grade 11', 'Grade 12', 'Total'],
+                array_map(fn ($r) => [$r['label'], $r['grade11'], $r['grade12'], $r['total']], $m['strands'])),
             new ArraySheet('Satisfaction', ['Measure', 'Value'], [
                 ['Overall rating', $m['satisfaction']['overall']],
                 ['Speed rating', $m['satisfaction']['speed']],

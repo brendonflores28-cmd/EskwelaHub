@@ -30,7 +30,7 @@ The Facebook page is public only in part (logged-out visitors see very little), 
 - [ ] Specimen signatures and whether PDFs may carry a printed e-signature, or must be signed by hand after printing
 
 ### B. What the school offers
-- [ ] Junior high only (Grades 7 to 10), or also **senior high** (Grades 11 and 12)? Which tracks and strands (STEM, ABM, HUMSS, GAS, TVL...)? *The system has grades 7 to 12 but no strand field yet.*
+- [ ] Junior high only (Grades 7 to 10), or also **senior high** (Grades 11 and 12)? Which tracks and strands (STEM, ABM, HUMSS, GAS, TVL...)? *The system supports Grades 7 to 12 and a strand per senior high learner and section; set the offered ones in `SCHOOL_STRANDS`.*
 - [ ] Special programs (for example SPA, STE, SPJ) and whether learners must be tagged with them
 - [ ] School year calendar: start, end, enrollment period, graduation / moving-up dates
 - [ ] How sections are named in each grade (heroes, flowers, numbers?), usual class size and the maximum per section
@@ -84,6 +84,6 @@ The chatbot answers only what is written in its FAQ table. Please give the schoo
 | Document list, fees, processing days | the document types in `app/Enums/DocumentType.php` and the FAQ |
 | FAQ answers | table `faq_entries` (`database/seeders/FaqSeeder.php`) |
 | Enrollment requirements | `app/Http/Requests/EnrollmentFormRequest.php` and the form page |
-| Strands / programs | new field on the enrollment record (ask us to add it) |
+| Strands offered (senior high) | `SCHOOL_STRANDS` in `.env`, for example `STEM,ABM,HUMSS` (empty = all). Strands are chosen when enrolling in Grades 11 and 12 and for class sections. |
 | Staff accounts | `php artisan eskwelahub:create-user email role --name="..."` |
 | Current school year | `php artisan eskwelahub:school-year 2026 --current` |

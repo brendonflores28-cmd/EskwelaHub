@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Staff;
 
+use App\Enums\Strand;
 use App\Models\Section;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -24,6 +25,12 @@ class SectionRequest extends FormRequest
             // The year and grade of an existing section cannot change: its learners belong to them.
             'school_year_id' => [$section ? 'prohibited' : 'required', 'exists:school_years,id'],
             'grade_level' => [$section ? 'prohibited' : 'required', 'integer', 'between:7,12'],
+            // Sections of senior high (Grades 11 and 12) belong to a strand; junior high sections have none.
+            'strand' => [
+                Rule::requiredIf(Strand::appliesTo((int) ($section?->grade_level ?? $this->input('grade_level')))),
+                Rule::prohibitedIf(! Strand::appliesTo((int) ($section?->grade_level ?? $this->input('grade_level')))),
+                'nullable', Rule::in(Strand::offeredValues()),
+            ],
             'name' => [
                 'required', 'string', 'max:60',
                 // One name per grade and school year ("Rizal" twice in Grade 7 would be confusing).
@@ -42,6 +49,8 @@ class SectionRequest extends FormRequest
     {
         $this->merge([
             'adviser_name' => $this->input('adviser_name') ?: null,
+            // Editing a section without sending a strand keeps the strand it has.
+            'strand' => $this->input('strand') ?: $this->route('section')?->strand?->value,
             'capacity' => $this->input('capacity') ?: null,
         ]);
     }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Staff;
 
 use App\Enums\Curriculum;
+use App\Enums\Strand;
 use App\Enums\StudentStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Staff\StudentRequest;
@@ -76,6 +77,7 @@ class StudentController extends Controller
             'student' => new StudentResource($student),
             'schoolYears' => SchoolYear::orderByDesc('start_year')->get(['id', 'label']),
             'statuses' => $this->statusOptions(),
+            'strands' => Strand::options(),
             'curricula' => collect(Curriculum::cases())
                 ->map(fn (Curriculum $c) => ['value' => $c->value, 'label' => $c->label()]),
         ]);

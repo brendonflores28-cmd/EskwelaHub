@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Enums\Curriculum;
+use App\Enums\Strand;
 use App\Enums\StudentStatus;
 use App\Models\SchoolYear;
 use App\Models\Section;
@@ -76,6 +77,9 @@ class SchoolDataSeeder extends Seeder
                 'birthdate' => fake()->dateTimeBetween(($entryYear - 13).'-01-01', ($entryYear - 12).'-12-31')->format('Y-m-d'),
             ]);
 
+            // The strand a learner chooses for Grades 11 and 12 (fake, from the strands the school offers).
+            $strand = fake()->randomElement(Strand::offered());
+
             $dropAfter = fake()->boolean(6) ? fake()->numberBetween(7, $lastGrade - 1) : null;
             $finishedAll = true;
 
@@ -86,11 +90,16 @@ class SchoolDataSeeder extends Seeder
                     break;
                 }
 
+                // Senior high (Grades 11 and 12): sections belong to a strand, for example "STEM-A".
+                $gradeStrand = Strand::appliesTo($grade) ? $strand : null;
+                $sectionName = $gradeStrand ? $gradeStrand->value.'-'.chr(65 + $i % 2) : self::SECTIONS[$i % count(self::SECTIONS)];
+
                 $section = Section::firstOrCreate([
                     'school_year_id' => $years[$schoolYearStart]->id,
                     'grade_level' => $grade,
-                    'name' => self::SECTIONS[$i % count(self::SECTIONS)],
+                    'name' => $sectionName,
                 ], [
+                    'strand' => $gradeStrand,
                     // Fake adviser names, only used when the section is first created.
                     'adviser_name' => fake()->randomElement(['Ms.', 'Mr.', 'Mrs.']).' '.fake()->lastName(),
                 ]);
@@ -99,6 +108,7 @@ class SchoolDataSeeder extends Seeder
                     'school_year_id' => $years[$schoolYearStart]->id,
                     'section_id' => $section->id,
                     'grade_level' => $grade,
+                    'strand' => $gradeStrand,
                     'curriculum' => $isK12 ? Curriculum::K12 : Curriculum::Bec,
                     'status' => StudentStatus::Enrolled,
                     'general_average' => fake()->randomFloat(2, 75, 98),

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Portal;
 
 use App\Enums\EnrollmentType;
+use App\Enums\Strand;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EnrollmentFormRequest;
 use App\Http\Resources\EnrollmentResource;
@@ -35,6 +36,7 @@ class EnrollmentController extends Controller
         return Inertia::render('portal/enrollments/Create', [
             'schoolYear' => SchoolYear::where('is_current', true)->value('label'),
             'types' => collect(EnrollmentType::cases())->map(fn (EnrollmentType $t) => ['value' => $t->value, 'label' => $t->label()]),
+            'strands' => Strand::options(), // for transferees into Grade 11 or 12
         ]);
     }
 

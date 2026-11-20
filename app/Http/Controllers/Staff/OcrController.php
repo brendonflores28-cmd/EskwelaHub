@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Staff;
 
 use App\Contracts\OcrEngine;
 use App\Enums\Curriculum;
+use App\Enums\Strand;
 use App\Enums\StudentStatus;
 use App\Http\Controllers\Controller;
 use App\Models\OcrDraft;
@@ -117,6 +118,7 @@ class OcrController extends Controller
                 'scan_url' => $urls->signed('scans.file', ['scan' => $draft->scan->id], 10),
             ],
             'schoolYears' => SchoolYear::orderByDesc('start_year')->get(['id', 'label']),
+            'strands' => Strand::options(),
             // Look-alike records that already exist: saving a draft may create a duplicate.
             'similar' => $detector->similarTo($draft->parsed['last_name'] ?? null, $draft->parsed['first_name'] ?? null, $draft->parsed['birthdate'] ?? null)
                 ->map(fn ($s) => ['id' => $s->id, 'full_name' => $s->full_name, 'lrn' => $s->lrn, 'birthdate' => $s->birthdate->toDateString()]),
@@ -138,6 +140,7 @@ class OcrController extends Controller
             'school_year_id' => ['nullable', 'exists:school_years,id'],
             'grade_level' => ['nullable', 'integer', 'between:7,12', 'required_with:school_year_id'],
             'general_average' => ['nullable', 'numeric', 'between:60,100'],
+            'strand' => ['nullable', Rule::in(Strand::offeredValues())],
         ]);
 
         $student = DB::transaction(function () use ($data, $draft, $request): Student {
@@ -156,6 +159,8 @@ class OcrController extends Controller
                 $student->enrollments()->create([
                     'school_year_id' => $year->id,
                     'grade_level' => $data['grade_level'],
+                    // Only Grades 11 and 12 have a strand (ignored for junior high).
+                    'strand' => Strand::appliesTo((int) $data['grade_level']) ? ($data['strand'] ?? null) : null,
                     'curriculum' => Curriculum::forLevel($year->start_year, (int) $data['grade_level']),
                     'status' => StudentStatus::Enrolled,
                     'general_average' => $data['general_average'] ?? null,

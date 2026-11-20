@@ -51,7 +51,9 @@ class EnrollmentApplicationController extends Controller
             'open' => $application->status->isOpen(),
             // Sections of the learner's grade this school year, to choose one when approving.
             'sections' => Section::where('school_year_id', $application->school_year_id)
-                ->where('grade_level', $application->grade_level)->withCount('enrollments')->orderBy('name')->get()
+                ->where('grade_level', $application->grade_level)
+                ->when($application->strand, fn ($q, $strand) => $q->where('strand', $strand)) // senior high: same strand only
+                ->withCount('enrollments')->orderBy('name')->get()
                 ->map(fn (Section $s) => [
                     'id' => $s->id,
                     'label' => $s->name.($s->capacity ? " ({$s->enrollments_count}/{$s->capacity})" : " ({$s->enrollments_count})"),

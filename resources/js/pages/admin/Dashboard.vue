@@ -19,6 +19,7 @@ type Metrics = {
     };
     enrollment: { label: string; start_year: number; count: number; is_current: boolean }[];
     graduates: { label: string; count: number }[];
+    strands: { strand: string; label: string; grade11: number; grade12: number; total: number }[];
     requests: {
         by_status: { status: string; label: string; count: number }[];
         by_month: { month: string; count: number }[];
@@ -60,6 +61,7 @@ const kpiCards = computed(() => [
 const enrollmentItems = computed(() =>
     props.metrics.enrollment.map((e) => ({ label: e.label.slice(2), value: e.count, highlight: e.is_current })),
 );
+const strandItems = computed(() => props.metrics.strands.map((s) => ({ label: s.label, value: s.total })));
 const graduateItems = computed(() => props.metrics.graduates.map((g) => ({ label: g.label.slice(2), value: g.count })));
 const statusItems = computed(() => props.metrics.requests.by_status.map((s) => ({ label: s.label, value: s.count })));
 const monthItems = computed(() => props.metrics.requests.by_month.map((m) => ({ label: m.month.slice(2), value: m.count })));
@@ -127,6 +129,17 @@ const pct = (n: number) => Math.round((n / sentimentTotal.value) * 100);
                 <CardContent>
                     <BarChart v-if="graduateItems.length" :items="graduateItems" />
                     <p v-else class="text-sm text-muted-foreground">No graduation data yet.</p>
+                </CardContent>
+            </Card>
+
+            <Card>
+                <CardHeader>
+                    <CardTitle>Senior high by strand</CardTitle>
+                    <CardDescription>Learners of Grades 11 and 12 this school year.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <BarChart v-if="strandItems.length" :items="strandItems" />
+                    <p v-else class="text-sm text-muted-foreground">No senior high learners with a strand yet.</p>
                 </CardContent>
             </Card>
 

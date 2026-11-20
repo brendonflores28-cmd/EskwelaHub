@@ -14,6 +14,7 @@ const props = defineProps<{
     section: {
         id: number;
         grade_level: number;
+        strand_short: string | null;
         name: string;
         adviser_name: string | null;
         capacity: number | null;
@@ -79,7 +80,9 @@ function remove(): void {
     <div class="flex flex-1 flex-col gap-4 p-4">
         <div class="flex flex-wrap items-start justify-between gap-2">
             <div>
-                <h1 class="text-2xl font-semibold">Grade {{ section.grade_level }} - {{ section.name }}</h1>
+                <h1 class="text-2xl font-semibold">
+                    Grade {{ section.grade_level }}<span v-if="section.strand_short"> {{ section.strand_short }}</span> - {{ section.name }}
+                </h1>
                 <p class="text-sm text-muted-foreground">
                     School year {{ section.school_year }} - adviser: {{ section.adviser_name ?? 'not set' }} -
                     {{ section.learners }}<span v-if="section.capacity"> of {{ section.capacity }}</span> learners

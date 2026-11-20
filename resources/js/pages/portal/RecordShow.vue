@@ -40,7 +40,7 @@ defineOptions({
                     <tbody>
                         <tr v-for="e in s.enrollments" :key="e.id" class="border-t">
                             <td class="py-2">{{ e.school_year }}</td>
-                            <td>{{ e.grade_level }}</td>
+                            <td>{{ e.grade_level }}<span v-if="e.strand"> - {{ e.strand_short }}</span></td>
                             <td>{{ e.section ?? '-' }}</td>
                             <td>{{ e.general_average ?? '-' }}</td>
                         </tr>

@@ -8,6 +8,8 @@ export type Enrollment = {
     school_year_id: number;
     school_year: string | null;
     grade_level: number;
+    strand: string | null;
+    strand_short: string | null;
     section: string | null;
     curriculum: string;
     status: string;
@@ -74,6 +76,8 @@ export type EnrollmentForm = {
     type: string;
     type_label: string;
     grade_level: number;
+    strand: string | null;
+    strand_label: string | null;
     status: string;
     status_label: string;
     decision_note: string | null;
@@ -93,3 +97,6 @@ export type EnrollmentForm = {
     applicant?: { name: string; email: string };
     documents?: { id: number; kind: string; original_name: string; size_kb: number }[];
 };
+
+/** A senior high strand or track the school offers (Grades 11 and 12). */
+export type StrandOption = { value: string; label: string; short: string };

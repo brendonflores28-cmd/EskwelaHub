@@ -9,13 +9,14 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import type { Option, SchoolYearOption, Student } from '@/types/records';
+import type { Option, SchoolYearOption, StrandOption, Student } from '@/types/records';
 
 const props = defineProps<{
     student: { data: Student };
     schoolYears: SchoolYearOption[];
     statuses: Option[];
     curricula: Option[];
+    strands: StrandOption[];
 }>();
 
 const s = computed(() => props.student.data);
@@ -31,13 +32,18 @@ const grades = [7, 8, 9, 10, 11, 12].map((g) => ({ value: g, label: `Grade ${g}`
 const enrollment = useForm({
     school_year_id: props.schoolYears[0]?.id ?? '',
     grade_level: 7,
+    strand: '' as string,
     section: '',
     curriculum: '',
     status: 'enrolled',
     general_average: '',
 });
 
+// A strand is asked only for senior high (Grades 11 and 12).
+const seniorHigh = computed(() => Number(enrollment.grade_level) >= 11);
+
 function saveEnrollment(): void {
+    if (!seniorHigh.value) enrollment.strand = '';
     enrollment.post(`/staff/students/${s.value.id}/enrollments`, { preserveScroll: true });
 }
 
@@ -106,7 +112,7 @@ function archive(): void {
                         <tbody>
                             <tr v-for="e in s.enrollments" :key="e.id" class="border-t">
                                 <td class="p-2">{{ e.school_year }}</td>
-                                <td class="p-2">{{ e.grade_level }}</td>
+                                <td class="p-2">{{ e.grade_level }}<span v-if="e.strand"> - {{ e.strand_short }}</span></td>
                                 <td class="p-2">{{ e.section ?? '-' }}</td>
                                 <td class="p-2 uppercase">{{ e.curriculum }}</td>
                                 <td class="p-2">{{ e.general_average ?? '-' }}</td>
@@ -131,6 +137,11 @@ function archive(): void {
                     <div class="grid gap-1">
                         <Label>Grade</Label>
                         <NativeSelect v-model="enrollment.grade_level" :options="grades" />
+                    </div>
+                    <div v-if="seniorHigh" class="grid gap-1">
+                        <Label>Strand</Label>
+                        <NativeSelect v-model="enrollment.strand" :options="strands.map((s) => ({ value: s.value, label: s.short }))" placeholder="Choose" />
+                        <InputError :message="enrollment.errors.strand" />
                     </div>
                     <div class="grid gap-1">
                         <Label>Section</Label>

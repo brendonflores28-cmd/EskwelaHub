@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Staff;
 
 use App\Enums\Curriculum;
+use App\Enums\Strand;
 use App\Enums\StudentStatus;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -21,6 +22,12 @@ class EnrollmentRequest extends FormRequest
         return [
             'school_year_id' => ['required', 'exists:school_years,id'],
             'grade_level' => ['required', 'integer', 'between:7,12'],
+            // Senior high (Grades 11 and 12) needs a strand; Grades 7 to 10 must not have one.
+            'strand' => [
+                Rule::requiredIf(Strand::appliesTo((int) $this->input('grade_level'))),
+                Rule::prohibitedIf(! Strand::appliesTo((int) $this->input('grade_level'))),
+                'nullable', Rule::in(Strand::offeredValues()),
+            ],
             'section' => ['nullable', 'string', 'max:60'],
             // Optional: when empty it is worked out from the school year and grade (K to 12 for every current school year).
             'curriculum' => ['nullable', Rule::enum(Curriculum::class)],

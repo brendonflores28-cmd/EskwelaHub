@@ -9,9 +9,9 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import type { SchoolYearOption } from '@/types/records';
+import type { SchoolYearOption, StrandOption } from '@/types/records';
 
-type SectionRow = { id: number; grade_level: number; name: string; adviser_name: string | null; capacity: number | null; learners: number };
+type SectionRow = { id: number; grade_level: number; strand: string | null; strand_short: string | null; name: string; adviser_name: string | null; capacity: number | null; learners: number };
 type Grade = { grade: number; enrolled: number; unassigned: number; sections: SectionRow[] };
 
 const props = defineProps<{
@@ -19,6 +19,7 @@ const props = defineProps<{
     schoolYears: SchoolYearOption[];
     grades: Grade[];
     canManage: boolean;
+    strands: StrandOption[];
 }>();
 
 defineOptions({
@@ -34,12 +35,12 @@ watch(year, () => {
 
 // One small form to add a section; the grade is picked on the card where "Add section" was pressed.
 const adding = ref<number | null>(null);
-const form = useForm({ school_year_id: props.schoolYearId, grade_level: 7, name: '', adviser_name: '', capacity: '' as string | number });
+const form = useForm({ school_year_id: props.schoolYearId, grade_level: 7, strand: '' as string, name: '', adviser_name: '', capacity: '' as string | number });
 
 function openAdd(grade: number): void {
     adding.value = grade;
     form.grade_level = grade;
-    form.reset('name', 'adviser_name', 'capacity');
+    form.reset('name', 'strand', 'adviser_name', 'capacity');
     form.clearErrors();
 }
 
@@ -76,6 +77,11 @@ function save(): void {
             </CardHeader>
             <CardContent class="space-y-3">
                 <form v-if="adding === g.grade" class="grid gap-3 rounded-lg border p-3 md:grid-cols-4" @submit.prevent="save">
+                    <div v-if="g.grade >= 11" class="grid gap-1 md:col-span-4">
+                        <Label>Strand</Label>
+                        <NativeSelect v-model="form.strand" :options="strands.map((s) => ({ value: s.value, label: s.label }))" placeholder="Choose a strand" />
+                        <InputError :message="form.errors.strand" />
+                    </div>
                     <div class="grid gap-1">
                         <Label>Section name</Label>
                         <Input v-model="form.name" placeholder="for example Rizal" required />
@@ -98,7 +104,10 @@ function save(): void {
 
                 <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                     <Link v-for="s in g.sections" :key="s.id" :href="`/staff/sections/${s.id}`" class="rounded-lg border p-3 transition hover:bg-muted/40">
-                        <div class="font-medium">{{ s.name }}</div>
+                        <div class="flex items-center gap-2 font-medium">
+                            {{ s.name }}
+                            <Badge v-if="s.strand_short" variant="secondary">{{ s.strand_short }}</Badge>
+                        </div>
                         <div class="text-sm text-muted-foreground">{{ s.adviser_name ?? 'No adviser yet' }}</div>
                         <div class="mt-1 text-sm">
                             {{ s.learners }}<span v-if="s.capacity"> / {{ s.capacity }}</span> learners

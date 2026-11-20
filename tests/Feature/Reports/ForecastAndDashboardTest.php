@@ -105,8 +105,8 @@ it('exports an Excel workbook with one sheet per topic', function () {
     $workbook = new DashboardExport(app(DashboardMetrics::class)->all());
     $titles = array_map(fn (ArraySheet $s) => $s->title(), $workbook->sheets());
 
-    expect($titles)->toBe(['Summary', 'Enrollment', 'Graduates', 'Requests', 'Satisfaction', 'Forecast']);
-    $forecast = collect($workbook->sheets()[5]->array());
+    expect($titles)->toBe(['Summary', 'Enrollment', 'Graduates', 'Requests', 'Senior high', 'Satisfaction', 'Forecast']);
+    $forecast = collect($workbook->sheets()[6]->array());
     expect($forecast->where(1, 'Forecast')->pluck(2)->all())->toBe([18, 20, 22])
         ->and($forecast->where(1, 'Actual')->count())->toBe(4)
         ->and($workbook->sheets()[1]->array())->toHaveCount(5);
@@ -132,5 +132,5 @@ it('hands the export to the Excel package with the right workbook', function () 
 
     $this->actingAs(adminUser())->get(route('admin.dashboard.export'));
 
-    Excel::assertDownloaded('eskwelahub-report-'.now()->format('Y-m-d').'.xlsx', fn (DashboardExport $e) => count($e->sheets()) === 6);
+    Excel::assertDownloaded('eskwelahub-report-'.now()->format('Y-m-d').'.xlsx', fn (DashboardExport $e) => count($e->sheets()) === 7);
 });

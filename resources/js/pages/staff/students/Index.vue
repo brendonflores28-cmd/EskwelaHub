@@ -95,7 +95,7 @@ const yearOptions = props.schoolYears.map((y) => ({ value: y.id, label: y.label 
                         <td class="p-3">{{ s.birthdate }}</td>
                         <td class="p-3">
                             <span v-if="s.latest_enrollment">
-                                {{ s.latest_enrollment.school_year }}, Grade {{ s.latest_enrollment.grade_level }}
+                                {{ s.latest_enrollment.school_year }}, Grade {{ s.latest_enrollment.grade_level }}<span v-if="s.latest_enrollment.strand"> {{ s.latest_enrollment.strand_short }}</span>
                                 <span v-if="s.latest_enrollment.section">- {{ s.latest_enrollment.section }}</span>
                             </span>
                             <span v-else class="text-muted-foreground">None</span>

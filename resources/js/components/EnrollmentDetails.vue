@@ -21,7 +21,9 @@ const kindLabels: Record<string, string> = {
             <div><span class="text-muted-foreground">LRN:</span> {{ a.lrn ?? 'none' }}</div>
             <div><span class="text-muted-foreground">Birthdate:</span> {{ a.birthdate }}</div>
             <div><span class="text-muted-foreground">Sex:</span> {{ a.sex === 'M' ? 'Male' : 'Female' }}</div>
-            <div><span class="text-muted-foreground">Type:</span> {{ a.type_label }}, Grade {{ a.grade_level }}</div>
+            <div>
+                <span class="text-muted-foreground">Type:</span> {{ a.type_label }}, Grade {{ a.grade_level }}<span v-if="a.strand"> - {{ a.strand_label }}</span>
+            </div>
             <div v-if="a.previous_school"><span class="text-muted-foreground">Previous school:</span> {{ a.previous_school }}</div>
             <div class="md:col-span-2"><span class="text-muted-foreground">Address:</span> {{ a.address }}</div>
             <div><span class="text-muted-foreground">Guardian:</span> {{ a.guardian_name }} ({{ a.relationship }})</div>

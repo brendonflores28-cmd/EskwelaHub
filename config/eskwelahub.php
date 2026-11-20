@@ -10,6 +10,10 @@ return [
     'school_name' => env('SCHOOL_NAME', 'Cawayan National High School'),
     'school_location' => env('SCHOOL_LOCATION', 'Bongabong, Oriental Mindoro'),
 
+    // Senior high strands the school offers, as codes separated by commas (STEM,ABM,HUMSS,GAS,TVL,SPORTS,ARTS).
+    // Empty means all of them. The school must tell us which ones it really offers (docs/SCHOOL_INFO_NEEDED.md).
+    'strands' => env('SCHOOL_STRANDS', ''),
+
     /*
     | Public details of the school, shown on the home page, in emails and on PDFs.
     | Source: the school's official Facebook page (contact info) and Republic Act

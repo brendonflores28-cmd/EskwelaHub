@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Enums\EnrollmentStatus;
 use App\Enums\EnrollmentType;
+use App\Enums\Strand;
 use App\Models\EnrollmentApplication;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -39,6 +40,11 @@ class EnrollmentFormRequest extends FormRequest
             'guardian_name' => ['required', 'string', 'max:150'],
             'guardian_contact' => ['required', 'string', 'regex:/^[0-9+\-\s()]{7,20}$/'],
             'previous_school' => [Rule::requiredIf($isTransferee), 'nullable', 'string', 'max:200'],
+            // A transferee into Grade 11 or 12 must choose a strand. New Grade 7 learners have none.
+            'strand' => [
+                Rule::requiredIf($isTransferee && Strand::appliesTo((int) $this->input('grade_level'))),
+                'nullable', Rule::in(Strand::offeredValues()),
+            ],
             'psa_birth_certificate' => ['required', ...$upload],
             'report_card' => ['required', ...$upload],
             'good_moral' => [Rule::requiredIf($isTransferee), 'nullable', ...$upload],
@@ -65,7 +71,7 @@ class EnrollmentFormRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
-        foreach (['lrn', 'middle_name', 'suffix', 'birthplace', 'previous_school'] as $field) {
+        foreach (['lrn', 'middle_name', 'suffix', 'birthplace', 'previous_school', 'strand'] as $field) {
             $this->merge([$field => $this->input($field) ?: null]);
         }
     }

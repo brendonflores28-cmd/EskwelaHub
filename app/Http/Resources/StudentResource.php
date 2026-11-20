@@ -57,6 +57,8 @@ class StudentResource extends JsonResource
             'school_year_id' => $e->school_year_id,
             'school_year' => $e->schoolYear?->label,
             'grade_level' => $e->grade_level,
+            'strand' => $e->strand?->value,
+            'strand_short' => $e->strand?->short(),
             'section' => $e->section?->name,
             'curriculum' => $e->curriculum->value,
             'status' => $e->status->value,

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Curriculum;
+use App\Enums\Strand;
 use App\Enums\StudentStatus;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
@@ -20,13 +21,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property StudentStatus $status
  * @property string|null $general_average
  */
-#[Fillable(['student_id', 'school_year_id', 'section_id', 'grade_level', 'curriculum', 'status', 'general_average'])]
+#[Fillable(['student_id', 'school_year_id', 'section_id', 'grade_level', 'strand', 'curriculum', 'status', 'general_average'])]
 class StudentEnrollment extends Model
 {
     protected function casts(): array
     {
         return [
             'curriculum' => Curriculum::class,
+            'strand' => Strand::class,
             'status' => StudentStatus::class,
         ];
     }

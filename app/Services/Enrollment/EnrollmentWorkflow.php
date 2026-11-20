@@ -6,6 +6,7 @@ use App\Enums\Curriculum;
 use App\Enums\EnrollmentStatus;
 use App\Enums\EnrollmentType;
 use App\Enums\LinkStatus;
+use App\Enums\Strand;
 use App\Enums\StudentStatus;
 use App\Exceptions\InvalidRequestTransition;
 use App\Models\EnrollmentApplication;
@@ -43,6 +44,10 @@ class EnrollmentWorkflow
                 'user_id' => $applicant->id,
                 'school_year_id' => $schoolYear->id,
                 'grade_level' => $data['type'] === EnrollmentType::Grade7->value ? 7 : $data['grade_level'],
+                // Only learners entering Grade 11 or 12 have a strand.
+                'strand' => $data['type'] === EnrollmentType::Transferee->value && Strand::appliesTo((int) $data['grade_level'])
+                    ? ($data['strand'] ?? null)
+                    : null,
             ]);
 
             foreach ($files as $kind => $file) {
@@ -73,6 +78,9 @@ class EnrollmentWorkflow
         if ($sectionId && ! $section) {
             throw ValidationException::withMessages(['section_id' => 'Choose a section of the same grade and school year.']);
         }
+        if ($section?->strand && $application->strand !== $section->strand) {
+            throw ValidationException::withMessages(['section_id' => "{$section->display_name} is for another strand."]);
+        }
         if ($section && $section->seatsLeft() === 0) {
             throw ValidationException::withMessages(['section_id' => "{$section->display_name} is full."]);
         }
@@ -97,6 +105,7 @@ class EnrollmentWorkflow
                 ['school_year_id' => $a->school_year_id],
                 [
                     'grade_level' => $a->grade_level,
+                    ...($a->strand ? ['strand' => $a->strand->value] : []),
                     'curriculum' => Curriculum::K12, // every new enrollment follows DepEd's K to 12 curriculum
                     'status' => StudentStatus::Enrolled,
                     // Only set when staff chose one: an existing enrollment keeps the section it already has.

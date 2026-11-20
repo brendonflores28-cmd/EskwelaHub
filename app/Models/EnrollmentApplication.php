@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\EnrollmentStatus;
 use App\Enums\EnrollmentType;
+use App\Enums\Strand;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -33,7 +34,7 @@ use Illuminate\Support\Carbon;
  * @property int|null $student_id
  */
 #[Fillable([
-    'user_id', 'school_year_id', 'type', 'grade_level', 'relationship', 'lrn', 'last_name', 'first_name',
+    'user_id', 'school_year_id', 'type', 'grade_level', 'strand', 'relationship', 'lrn', 'last_name', 'first_name',
     'middle_name', 'suffix', 'sex', 'birthdate', 'birthplace', 'address', 'guardian_name', 'guardian_contact',
     'previous_school',
 ])]
@@ -43,6 +44,7 @@ class EnrollmentApplication extends Model
     {
         return [
             'type' => EnrollmentType::class,
+            'strand' => Strand::class,
             'status' => EnrollmentStatus::class,
             'birthdate' => 'date',
             'reviewed_at' => 'datetime',

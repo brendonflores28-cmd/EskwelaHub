@@ -18,6 +18,8 @@ class EnrollmentResource extends JsonResource
             'type' => $this->type->value,
             'type_label' => $this->type->label(),
             'grade_level' => $this->grade_level,
+            'strand' => $this->strand?->value,
+            'strand_label' => $this->strand?->label(),
             'status' => $this->status->value,
             'status_label' => $this->status->label(),
             'decision_note' => $this->decision_note,

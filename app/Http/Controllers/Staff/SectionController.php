@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Staff;
 
+use App\Enums\Strand;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Staff\SectionRequest;
 use App\Models\SchoolYear;
@@ -47,6 +48,7 @@ class SectionController extends Controller
             'schoolYears' => SchoolYear::orderByDesc('start_year')->get(['id', 'label']),
             'grades' => $grades,
             'canManage' => $request->user()->can('sections.manage'),
+            'strands' => Strand::options(), // for the "Add section" form of Grades 11 and 12
         ]);
     }
 
@@ -73,6 +75,8 @@ class SectionController extends Controller
             ->where('school_year_id', $section->school_year_id)
             ->where('grade_level', $section->grade_level)
             ->whereNull('section_id')
+            // A senior high section only takes learners of its own strand (or with no strand chosen yet).
+            ->when($section->strand, fn ($q, $strand) => $q->where(fn ($w) => $w->whereNull('strand')->orWhere('strand', $strand)))
             ->with('student')
             ->get()
             ->sortBy(fn (StudentEnrollment $e) => $e->student->name_key)
@@ -92,6 +96,12 @@ class SectionController extends Controller
         $capacity = $request->validated('capacity');
         if ($capacity !== null && $capacity < $section->enrollments()->count()) {
             throw ValidationException::withMessages(['capacity' => 'The capacity is lower than the learners already in this section.']);
+        }
+
+        // The strand of a section that already has learners cannot change under them.
+        $newStrand = $request->validated('strand');
+        if (($newStrand ?? null) !== $section->strand?->value && $section->enrollments()->exists()) {
+            throw ValidationException::withMessages(['strand' => 'Move the learners out before changing the strand of this section.']);
         }
 
         $section->update($request->validated());
@@ -149,7 +159,15 @@ class SectionController extends Controller
                 throw ValidationException::withMessages(['enrollment_ids' => "Only {$seats} place(s) left in this section."]);
             }
 
-            StudentEnrollment::whereIn('id', $enrollments->modelKeys())->update(['section_id' => $locked->id]);
+            // Senior high: the learner's strand must be the section's strand. A learner with no strand yet takes it.
+            if ($locked->strand && $enrollments->contains(fn (StudentEnrollment $e) => $e->strand !== null && $e->strand !== $locked->strand)) {
+                throw ValidationException::withMessages(['enrollment_ids' => "Only {$locked->strand->short()} learners can join this section."]);
+            }
+
+            StudentEnrollment::whereIn('id', $enrollments->modelKeys())->update([
+                'section_id' => $locked->id,
+                ...($locked->strand ? ['strand' => $locked->strand->value] : []),
+            ]);
         });
 
         Inertia::flash('toast', ['type' => 'success', 'message' => count($ids).' learner(s) added to the section.']);
@@ -180,6 +198,8 @@ class SectionController extends Controller
         return [
             'id' => $s->id,
             'grade_level' => $s->grade_level,
+            'strand' => $s->strand?->value,
+            'strand_short' => $s->strand?->short(),
             'name' => $s->name,
             'adviser_name' => $s->adviser_name,
             'capacity' => $s->capacity,

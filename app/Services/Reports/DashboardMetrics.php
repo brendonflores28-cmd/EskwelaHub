@@ -4,10 +4,12 @@ namespace App\Services\Reports;
 
 use App\Enums\RequestStatus;
 use App\Enums\Sentiment;
+use App\Enums\Strand;
 use App\Enums\StudentStatus;
 use App\Models\DocumentRequest;
 use App\Models\SchoolYear;
 use App\Models\Student;
+use App\Models\StudentEnrollment;
 use App\Models\Survey;
 
 /**
@@ -30,6 +32,7 @@ class DashboardMetrics
                 'by_status' => $this->requestsByStatus(),
                 'by_month' => $this->requestsByMonth(),
             ],
+            'strands' => $this->seniorHighByStrand(),
             'satisfaction' => $this->satisfaction(),
             'forecast' => $this->forecaster->forecast(),
         ];
@@ -67,6 +70,36 @@ class DashboardMetrics
         return SchoolYear::withCount('graduations')->orderBy('start_year')->get()
             ->filter(fn (SchoolYear $y) => $y->graduations_count > 0)
             ->map(fn (SchoolYear $y) => ['label' => $y->label, 'start_year' => $y->start_year, 'count' => $y->graduations_count])
+            ->values()
+            ->all();
+    }
+
+    /**
+     * Senior high learners of the current school year per strand and grade.
+     *
+     * @return list<array{strand: string, label: string, grade11: int, grade12: int, total: int}>
+     */
+    public function seniorHighByStrand(): array
+    {
+        $current = SchoolYear::where('is_current', true)->value('id');
+        if (! $current) {
+            return [];
+        }
+
+        $rows = StudentEnrollment::query()
+            ->where('school_year_id', $current)
+            ->whereNotNull('strand')
+            ->get(['strand', 'grade_level']);
+
+        return collect(Strand::cases())
+            ->map(fn (Strand $s) => [
+                'strand' => $s->value,
+                'label' => $s->short(),
+                'grade11' => $rows->where('strand', $s)->where('grade_level', 11)->count(),
+                'grade12' => $rows->where('strand', $s)->where('grade_level', 12)->count(),
+            ])
+            ->map(fn (array $r) => $r + ['total' => $r['grade11'] + $r['grade12']])
+            ->filter(fn (array $r) => $r['total'] > 0)
             ->values()
             ->all();
     }

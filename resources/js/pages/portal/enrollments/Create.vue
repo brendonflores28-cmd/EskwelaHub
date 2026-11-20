@@ -6,9 +6,9 @@ import NativeSelect from '@/components/NativeSelect.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import type { Option } from '@/types/records';
+import type { Option, StrandOption } from '@/types/records';
 
-defineProps<{ schoolYear: string | null; types: Option[] }>();
+defineProps<{ schoolYear: string | null; types: Option[]; strands: StrandOption[] }>();
 
 defineOptions({
     layout: { breadcrumbs: [{ title: 'My enrollment', href: '/my-enrollments' }] },
@@ -17,6 +17,7 @@ defineOptions({
 const form = useForm({
     type: 'grade7',
     grade_level: 7,
+    strand: '' as string,
     relationship: 'parent',
     lrn: '',
     last_name: '',
@@ -37,6 +38,8 @@ const form = useForm({
 });
 
 const isTransferee = computed(() => form.type === 'transferee');
+// Senior high (Grades 11 and 12) learners choose a strand.
+const needsStrand = computed(() => isTransferee.value && Number(form.grade_level) >= 11);
 const grades = [7, 8, 9, 10, 11, 12].map((g) => ({ value: g, label: `Grade ${g}` }));
 
 function pick(field: 'psa_birth_certificate' | 'report_card' | 'good_moral' | 'other_document', event: Event): void {
@@ -70,6 +73,11 @@ function submit(): void {
                 <Label>Grade to enter</Label>
                 <NativeSelect v-model="form.grade_level" :options="grades" />
                 <InputError :message="form.errors.grade_level" />
+            </div>
+            <div v-if="needsStrand" class="grid gap-2 md:col-span-2">
+                <Label>Strand (senior high)</Label>
+                <NativeSelect v-model="form.strand" :options="strands.map((s) => ({ value: s.value, label: s.label }))" placeholder="Choose a strand" />
+                <InputError :message="form.errors.strand" />
             </div>
             <div v-if="isTransferee" class="grid gap-2 md:col-span-2">
                 <Label for="previous_school">Previous school</Label>

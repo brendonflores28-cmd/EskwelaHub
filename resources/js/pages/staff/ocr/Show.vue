@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import type { SchoolYearOption } from '@/types/records';
+import type { SchoolYearOption, StrandOption } from '@/types/records';
 
 type Parsed = {
     lrn?: string | null;
@@ -34,6 +34,7 @@ const props = defineProps<{
     };
     schoolYears: SchoolYearOption[];
     similar: { id: number; full_name: string; lrn: string | null; birthdate: string }[];
+    strands: StrandOption[];
 }>();
 
 defineOptions({
@@ -53,6 +54,7 @@ const form = useForm({
     birthdate: p.birthdate ?? '',
     school_year_id: guessedYear as string | number,
     grade_level: p.grade_level ?? '',
+    strand: '' as string,
     general_average: p.general_average ?? '',
 });
 
@@ -132,6 +134,10 @@ const pending = props.draft.status === 'pending';
                             <Label>Grade</Label>
                             <NativeSelect v-model="form.grade_level" :options="grades" placeholder="None" />
                             <InputError :message="form.errors.grade_level" />
+                        </div>
+                        <div v-if="Number(form.grade_level) >= 11" class="grid gap-1">
+                            <Label>Strand</Label>
+                            <NativeSelect v-model="form.strand" :options="strands.map((s) => ({ value: s.value, label: s.short }))" placeholder="Choose" />
                         </div>
                         <div class="grid gap-1">
                             <Label>General average</Label>

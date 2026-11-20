@@ -35,6 +35,7 @@ class StudentEnrollmentController extends Controller
             [
                 'section_id' => $sectionId,
                 'grade_level' => $data['grade_level'],
+                'strand' => $data['strand'] ?? null,
                 'curriculum' => $data['curriculum']
                     ?? Curriculum::forLevel(SchoolYear::findOrFail($data['school_year_id'])->start_year, (int) $data['grade_level']),
                 'status' => $data['status'],
