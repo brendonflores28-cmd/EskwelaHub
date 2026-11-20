@@ -114,7 +114,7 @@ it('lets staff review alerts and blocks everyone else', function () {
     $this->actingAs(parentUser())->post(route('staff.alerts.merge', $flag), ['keep' => $keep->id])->assertForbidden();
 
     $this->actingAs(staffUser())->get(route('staff.alerts.index'))
-        ->assertOk()->assertInertia(fn ($page) => $page->component('staff/alerts/Index')->has('duplicates', 1));
+        ->assertOk()->assertInertia(fn ($page) => $page->component('staff/alerts/Index')->has('duplicates.data', 1));
 
     // Merging must keep one of the two records of the flag.
     $this->post(route('staff.alerts.merge', $flag), ['keep' => 999999])->assertStatus(422);

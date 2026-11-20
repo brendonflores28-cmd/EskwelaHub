@@ -1,5 +1,6 @@
 ﻿<script setup lang="ts">
 import { Head, Link, router } from '@inertiajs/vue3';
+import SimplePagination from '@/components/SimplePagination.vue';
 import { Button } from '@/components/ui/button';
 
 type LinkRequest = {
@@ -10,7 +11,7 @@ type LinkRequest = {
     student: { id: number; lrn: string | null; full_name: string; birthdate: string };
 };
 
-defineProps<{ links: LinkRequest[] }>();
+defineProps<{ links: { data: LinkRequest[]; prev_page_url: string | null; next_page_url: string | null; current_page: number; last_page: number; total: number; from: number | null; to: number | null } }>();
 
 defineOptions({
     layout: { breadcrumbs: [{ title: 'Link requests', href: '/staff/links' }] },
@@ -45,7 +46,7 @@ function review(id: number, action: 'approve' | 'reject'): void {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="l in links" :key="l.id" class="border-t">
+                    <tr v-for="l in links.data" :key="l.id" class="border-t">
                         <td class="p-3">
                             <div class="font-medium">{{ l.user.name }}</div>
                             <div class="text-muted-foreground">{{ l.user.email }}</div>
@@ -63,11 +64,13 @@ function review(id: number, action: 'approve' | 'reject'): void {
                             <Button size="sm" variant="outline" @click="review(l.id, 'reject')">Reject</Button>
                         </td>
                     </tr>
-                    <tr v-if="links.length === 0">
+                    <tr v-if="links.data.length === 0">
                         <td colspan="5" class="p-6 text-center text-muted-foreground">No pending requests.</td>
                     </tr>
                 </tbody>
             </table>
         </div>
+
+        <SimplePagination :page="links" />
     </div>
 </template>

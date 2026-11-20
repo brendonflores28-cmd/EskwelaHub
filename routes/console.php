@@ -1,6 +1,7 @@
 <?php
 
 use App\Jobs\DetectDuplicates;
+use App\Models\SessionLog;
 use Illuminate\Support\Facades\Schedule;
 
 /*
@@ -20,3 +21,6 @@ Schedule::command('activitylog:clean')->daily();
 
 // Possible duplicate student records: checked every night, shown to staff as alerts.
 Schedule::job(new DetectDuplicates)->dailyAt('01:30');
+
+// Session logs older than one year are deleted (App\Models\SessionLog::prunable).
+Schedule::command('model:prune', ['--model' => [SessionLog::class]])->daily();

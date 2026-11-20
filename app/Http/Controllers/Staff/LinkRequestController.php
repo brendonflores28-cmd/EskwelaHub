@@ -20,8 +20,9 @@ class LinkRequestController extends Controller
             ->where('status', LinkStatus::Pending)
             ->with(['user:id,name,email', 'student'])
             ->oldest()
-            ->get()
-            ->map(fn (StudentLink $link) => [
+            ->paginate(10)
+            ->withQueryString()
+            ->through(fn (StudentLink $link) => [
                 'id' => $link->id,
                 'relationship' => $link->relationship,
                 'requested_at' => $link->created_at->toDateTimeString(),

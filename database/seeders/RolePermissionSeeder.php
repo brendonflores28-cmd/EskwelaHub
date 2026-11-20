@@ -31,6 +31,7 @@ class RolePermissionSeeder extends Seeder
             'enrollments.process',  // review, approve, reject enrollment forms
             'ocr.use',              // upload scans and verify OCR drafts
             'surveys.view',         // read satisfaction surveys (admin only)
+            'sessions.view',        // read the session logs: logins, logouts, registrations, failed logins (admin only)
             'reports.view',         // principal dashboard with enrollment, requests, forecast (admin only)
             'reports.export',       // download the dashboard as Excel (admin only)
         ];

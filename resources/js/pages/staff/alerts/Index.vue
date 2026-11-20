@@ -9,7 +9,7 @@ import type { Paginated, Student } from '@/types/records';
 type Pair = { id: number; score: number; reason: string; a: Student; b: Student };
 
 defineProps<{
-    duplicates: Pair[];
+    duplicates: { data: Pair[]; prev_page_url: string | null; next_page_url: string | null; current_page: number; last_page: number; total: number; from: number | null; to: number | null };
     counts: Record<string, number>;
     labels: Record<string, string>;
     issue: string | null;
@@ -40,9 +40,9 @@ function merge(flagId: number, keep: number, other: string): void {
         </div>
 
         <Card>
-            <CardHeader><CardTitle>Possible duplicates ({{ duplicates.length }})</CardTitle></CardHeader>
+            <CardHeader><CardTitle>Possible duplicates ({{ duplicates.total }})</CardTitle></CardHeader>
             <CardContent class="space-y-3">
-                <div v-for="d in duplicates" :key="d.id" class="border p-3 text-sm">
+                <div v-for="d in duplicates.data" :key="d.id" class="border p-3 text-sm">
                     <div class="mb-2 text-muted-foreground">{{ d.reason }} - match {{ Math.round(d.score * 100) }}%</div>
                     <div class="grid gap-3 md:grid-cols-2">
                         <div v-for="(s, i) in [d.a, d.b]" :key="s.id" class="border p-2">
@@ -60,7 +60,8 @@ function merge(flagId: number, keep: number, other: string): void {
                         They are different people
                     </Button>
                 </div>
-                <p v-if="duplicates.length === 0" class="text-sm text-muted-foreground">No possible duplicates.</p>
+                <p v-if="duplicates.data.length === 0" class="text-sm text-muted-foreground">No possible duplicates.</p>
+                <SimplePagination v-if="duplicates.last_page > 1" :page="duplicates" />
             </CardContent>
         </Card>
 

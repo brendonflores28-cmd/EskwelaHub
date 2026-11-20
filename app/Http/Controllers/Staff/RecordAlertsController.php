@@ -27,9 +27,9 @@ class RecordAlertsController extends Controller
             ->where('status', 'open')
             ->with(['studentA.latestEnrollment.schoolYear', 'studentB.latestEnrollment.schoolYear'])
             ->orderByDesc('score')
-            ->limit(50)
-            ->get()
-            ->map(fn (DuplicateFlag $f) => [
+            ->paginate(8, pageName: 'dup_page')
+            ->withQueryString()
+            ->through(fn (DuplicateFlag $f) => [
                 'id' => $f->id,
                 'score' => (float) $f->score,
                 'reason' => $f->reason,

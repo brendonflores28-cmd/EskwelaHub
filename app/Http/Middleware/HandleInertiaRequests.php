@@ -47,6 +47,7 @@ class HandleInertiaRequests extends Middleware
                     'viewStudents' => $request->user()?->can('students.view') ?? false,
                     'reviewLinks' => $request->user()?->can('links.review') ?? false,
                     'viewAudit' => $request->user()?->can('audit.view') ?? false,
+                    'viewSessions' => $request->user()?->can('sessions.view') ?? false,
                     'processRequests' => $request->user()?->can('requests.view') ?? false,
                     'reviewEnrollments' => $request->user()?->can('enrollments.view') ?? false,
                     'useOcr' => $request->user()?->can('ocr.use') ?? false,

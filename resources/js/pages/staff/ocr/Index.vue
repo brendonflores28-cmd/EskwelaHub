@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { Head, Link } from '@inertiajs/vue3';
 import { Upload } from '@lucide/vue';
+import SimplePagination from '@/components/SimplePagination.vue';
 import StatusBadge from '@/components/StatusBadge.vue';
 import { Button } from '@/components/ui/button';
 
 type Draft = { id: number; file: string; status: string; uploaded_by: string | null; at: string; student_id: number | null };
 
-defineProps<{ drafts: { data: Draft[] } }>();
+defineProps<{ drafts: { data: Draft[]; prev_page_url: string | null; next_page_url: string | null; current_page: number; last_page: number; total: number; from: number | null; to: number | null } }>();
 
 defineOptions({
     layout: { breadcrumbs: [{ title: 'Digitize records', href: '/staff/ocr' }] },
@@ -52,5 +53,7 @@ defineOptions({
                 </tbody>
             </table>
         </div>
+
+        <SimplePagination :page="drafts" />
     </div>
 </template>

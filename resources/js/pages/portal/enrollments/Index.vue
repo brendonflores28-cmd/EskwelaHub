@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { Head, Link } from '@inertiajs/vue3';
 import { Plus } from '@lucide/vue';
+import SimplePagination from '@/components/SimplePagination.vue';
 import StatusBadge from '@/components/StatusBadge.vue';
 import { Button } from '@/components/ui/button';
-import type { EnrollmentForm } from '@/types/records';
+import type { EnrollmentForm, Paginated } from '@/types/records';
 
-defineProps<{ applications: { data: EnrollmentForm[] } }>();
+defineProps<{ applications: Paginated<EnrollmentForm> }>();
 
 defineOptions({
     layout: { breadcrumbs: [{ title: 'My enrollment', href: '/my-enrollments' }] },
@@ -50,5 +51,7 @@ defineOptions({
                 </tbody>
             </table>
         </div>
+
+        <SimplePagination :page="applications" />
     </div>
 </template>

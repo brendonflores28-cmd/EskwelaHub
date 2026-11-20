@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Head, router } from '@inertiajs/vue3';
-import { computed, ref, watch } from 'vue';
+import { ref, watch } from 'vue';
 import NativeSelect from '@/components/NativeSelect.vue';
 import SimplePagination from '@/components/SimplePagination.vue';
 import { Badge } from '@/components/ui/badge';
@@ -29,12 +29,6 @@ defineOptions({
 
 const sentiment = ref<string | number | null>(props.filters.sentiment ?? '');
 watch(sentiment, () => router.get('/admin/surveys', { sentiment: sentiment.value || undefined }, { preserveState: true, replace: true }));
-
-const page = computed(() => ({
-    data: props.surveys.data,
-    links: { prev: props.surveys.prev_page_url, next: props.surveys.next_page_url },
-    meta: { current_page: props.surveys.current_page, last_page: props.surveys.last_page, total: props.surveys.total, from: props.surveys.from, to: props.surveys.to },
-}));
 
 const options = ['positive', 'neutral', 'negative'].map((s) => ({ value: s, label: s }));
 const color: Record<string, string> = { positive: 'default', negative: 'destructive', neutral: 'secondary' };
@@ -82,6 +76,6 @@ const color: Record<string, string> = { positive: 'default', negative: 'destruct
             </table>
         </div>
 
-        <SimplePagination :page="page" />
+        <SimplePagination :page="surveys" />
     </div>
 </template>

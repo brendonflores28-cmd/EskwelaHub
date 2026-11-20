@@ -63,7 +63,7 @@ it('opens every staff page for staff', function () {
 it('opens every admin page for the principal', function () {
     $this->actingAs(adminUser());
 
-    foreach ([route('dashboard'), route('admin.audit-log'), route('admin.surveys'), route('staff.students.index'), route('staff.alerts.index')] as $url) {
+    foreach ([route('dashboard'), route('admin.audit-log'), route('admin.session-logs'), route('admin.surveys'), route('staff.students.index'), route('staff.alerts.index')] as $url) {
         $this->get($url)->assertOk();
     }
 });
@@ -72,12 +72,12 @@ it('keeps parents out of every staff and admin page', function (string $route) {
     $this->actingAs(parentUser())->get(route($route))->assertForbidden();
 })->with([
     'staff.students.index', 'staff.requests.index', 'staff.enrollments.index', 'staff.ocr.index', 'staff.ocr.create',
-    'staff.alerts.index', 'staff.links.index', 'staff.sections.index', 'admin.audit-log', 'admin.surveys', 'admin.dashboard.export',
+    'staff.alerts.index', 'staff.links.index', 'staff.sections.index', 'admin.audit-log', 'admin.session-logs', 'admin.surveys', 'admin.dashboard.export',
 ]);
 
 it('keeps staff out of the principal-only pages', function (string $route) {
     $this->actingAs(staffUser())->get(route($route))->assertForbidden();
-})->with(['admin.audit-log', 'admin.surveys', 'admin.dashboard.export']);
+})->with(['admin.audit-log', 'admin.session-logs', 'admin.surveys', 'admin.dashboard.export']);
 
 it('sends guests to the login page from every private page', function (string $route) {
     $this->get(route($route))->assertRedirect(route('login'));

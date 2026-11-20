@@ -18,6 +18,7 @@ export type Auth = {
         viewStudents: boolean;
         reviewLinks: boolean;
         viewAudit: boolean;
+        viewSessions: boolean;
         processRequests: boolean;
         reviewEnrollments: boolean;
         useOcr: boolean;

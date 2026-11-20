@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AuditLogController;
 use App\Http\Controllers\Admin\ReportExportController;
+use App\Http\Controllers\Admin\SessionLogController;
 use App\Http\Controllers\Admin\SurveyController as AdminSurveyController;
 use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\DashboardController;
@@ -153,6 +154,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->prefix('admin')->name('admin.')->group(function () {
             Route::get('audit-log', [AuditLogController::class, 'index'])->name('audit-log');
         });
+
+    // Session logs (sign-in events) are kept apart from the audit trail (what users do inside the system).
+    Route::middleware(['permission:sessions.view', 'two-factor'])
+        ->get('admin/session-logs', [SessionLogController::class, 'index'])
+        ->name('admin.session-logs');
 
     Route::middleware(['permission:reports.export', 'two-factor'])
         ->get('admin/dashboard/export', ReportExportController::class)

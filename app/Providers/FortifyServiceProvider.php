@@ -4,8 +4,11 @@ namespace App\Providers;
 
 use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\ResetUserPassword;
+use App\Models\SessionLog;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
@@ -88,7 +91,19 @@ class FortifyServiceProvider extends ServiceProvider
         RateLimiter::for('login', function (Request $request) {
             $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())).'|'.$request->ip());
 
-            return Limit::perMinute(5)->by($throttleKey);
+            return Limit::perMinute(5)->by($throttleKey)->response(function (Request $request, array $headers) use ($throttleKey) {
+                // Session log: one "locked out" entry per minute and account, not one per blocked click.
+                if (Cache::add('lockout-logged:'.sha1($throttleKey), true, 60)) {
+                    SessionLog::create([
+                        'email' => mb_substr((string) $request->input(Fortify::username()), 0, 255),
+                        'event' => 'locked_out',
+                        'ip' => $request->ip(),
+                        'user_agent' => $request->userAgent() ? mb_substr($request->userAgent(), 0, 200) : null,
+                    ]);
+                }
+
+                throw new ThrottleRequestsException('Too Many Attempts.', null, $headers);
+            });
         });
 
         RateLimiter::for('passkeys', function (Request $request) {

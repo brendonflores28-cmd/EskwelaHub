@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Link, usePage } from '@inertiajs/vue3';
-import { ClipboardList, FileText, GraduationCap, LayoutGrid, LayoutList, MessageSquareText, ScanLine, ScrollText, TriangleAlert, UserCheck, UserPlus } from '@lucide/vue';
+import { ClipboardList, FileText, GraduationCap, KeyRound, LayoutGrid, LayoutList, MessageSquareText, ScanLine, ScrollText, TriangleAlert, UserCheck, UserPlus } from '@lucide/vue';
 import { computed } from 'vue';
 import AppLogo from '@/components/AppLogo.vue';
 import NavMain from '@/components/NavMain.vue';
@@ -52,7 +52,10 @@ const mainNavItems = computed<NavItem[]>(() => {
         items.push({ title: 'Surveys', href: '/admin/surveys', icon: MessageSquareText });
     }
     if (can.viewAudit) {
-        items.push({ title: 'Audit log', href: '/admin/audit-log', icon: ScrollText });
+        items.push({ title: 'Audit trail', href: '/admin/audit-log', icon: ScrollText });
+    }
+    if (can.viewSessions) {
+        items.push({ title: 'Session logs', href: '/admin/session-logs', icon: KeyRound });
     }
     if (!can.viewStudents) {
         items.push({ title: 'My records', href: '/my-records', icon: ClipboardList });

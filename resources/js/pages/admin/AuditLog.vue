@@ -2,7 +2,7 @@
 import { Head, Link, router } from '@inertiajs/vue3';
 import { ref, watch } from 'vue';
 import NativeSelect from '@/components/NativeSelect.vue';
-import { Button } from '@/components/ui/button';
+import SimplePagination from '@/components/SimplePagination.vue';
 
 type Entry = {
     id: number;
@@ -17,8 +17,10 @@ type Entry = {
 
 type Page = {
     data: Entry[];
-    next_page_url: string | null;
     prev_page_url: string | null;
+    next_page_url: string | null;
+    current_page: number;
+    last_page: number;
     from: number | null;
     to: number | null;
     total: number;
@@ -32,7 +34,7 @@ const props = defineProps<{
 }>();
 
 defineOptions({
-    layout: { breadcrumbs: [{ title: 'Audit log', href: '/admin/audit-log' }] },
+    layout: { breadcrumbs: [{ title: 'Audit trail', href: '/admin/audit-log' }] },
 });
 
 const log = ref<string | number | null>(props.filters.log ?? '');
@@ -50,17 +52,21 @@ const toOptions = (items: string[]) => items.map((i) => ({ value: i, label: i })
 </script>
 
 <template>
-    <Head title="Audit log" />
+    <Head title="Audit trail" />
 
     <div class="flex flex-1 flex-col gap-4 p-4">
         <div>
-            <h1 class="text-2xl font-semibold">Audit log</h1>
-            <p class="text-sm text-muted-foreground">Who viewed, changed, requested or released which record.</p>
+            <h1 class="text-2xl font-semibold">Audit trail</h1>
+            <p class="text-sm text-muted-foreground">
+                What people did inside the system: who viewed, changed, requested, approved or released which record.
+                Sign-ins, logouts and registrations are in the
+                <Link href="/admin/session-logs" class="underline">Session logs</Link>.
+            </p>
         </div>
 
         <div class="grid max-w-lg gap-2 md:grid-cols-2">
-            <NativeSelect v-model="log" :options="toOptions(logs)" placeholder="All logs" />
-            <NativeSelect v-model="event" :options="toOptions(events)" placeholder="All events" />
+            <NativeSelect v-model="log" :options="toOptions(logs)" placeholder="All areas" />
+            <NativeSelect v-model="event" :options="toOptions(events)" placeholder="All actions" />
         </div>
 
         <div class="overflow-x-auto border">
@@ -69,7 +75,7 @@ const toOptions = (items: string[]) => items.map((i) => ({ value: i, label: i })
                     <tr>
                         <th class="p-3">When</th>
                         <th class="p-3">Who</th>
-                        <th class="p-3">Event</th>
+                        <th class="p-3">Action</th>
                         <th class="p-3">Record</th>
                         <th class="p-3">IP</th>
                     </tr>
@@ -92,16 +98,6 @@ const toOptions = (items: string[]) => items.map((i) => ({ value: i, label: i })
             </table>
         </div>
 
-        <div class="flex items-center justify-between text-sm text-muted-foreground">
-            <span>{{ entries.total }} entries</span>
-            <div class="flex gap-2">
-                <Button v-if="entries.prev_page_url" variant="outline" size="sm" as-child>
-                    <Link :href="entries.prev_page_url">Previous</Link>
-                </Button>
-                <Button v-if="entries.next_page_url" variant="outline" size="sm" as-child>
-                    <Link :href="entries.next_page_url">Next</Link>
-                </Button>
-            </div>
-        </div>
+        <SimplePagination :page="entries" />
     </div>
 </template>

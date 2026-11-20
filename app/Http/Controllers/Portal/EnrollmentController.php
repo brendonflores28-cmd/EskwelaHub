@@ -24,7 +24,8 @@ class EnrollmentController extends Controller
         $applications = EnrollmentApplication::query()
             ->where('user_id', $request->user()->id)
             ->latest()
-            ->get();
+            ->paginate(10)
+            ->withQueryString();
 
         return Inertia::render('portal/enrollments/Index', [
             'applications' => EnrollmentResource::collection($applications),

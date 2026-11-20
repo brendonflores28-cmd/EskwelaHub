@@ -68,6 +68,8 @@ The page tests read the built assets, so run `npm run build` after changing any 
 
 | Part | Where | Notes |
 |---|---|---|
+| Audit trail | `app/Services/Audit/AuditLogger.php`, `/admin/audit-log` | What people DO inside the system: viewed, changed, requested, approved, released, downloaded. Principal only. |
+| Session logs | `app/Listeners/RecordSessionEvent.php`, `/admin/session-logs` | Sign-in events ONLY: login, logout, registration, failed login, lockout, password reset, two-step codes. Passwords are never stored. Kept one year, then deleted by the daily job. Principal only. |
 | Roles and policies | `app/Policies`, `database/seeders/RolePermissionSeeder.php` | `student_parent`, `staff`, `admin`. Parents see only records staff linked to their account. |
 | Student records and search | `app/Services/Search`, `app/Support/NameIndex.php` | LRN, name (typo tolerant), school year. Plain query builder, ranking in PHP. |
 | Document requests | `app/Services/Requests/RequestWorkflow.php` | `submitted â†’ under_review â†’ approved â†’ processing â†’ ready â†’ released` or `rejected`. History, audit log, email. |
