@@ -73,7 +73,7 @@ const steps = [
         <!-- Hero: school photo covered with transparent green -->
         <section class="hero relative isolate overflow-hidden text-white">
             <div class="absolute inset-0 -z-20 bg-cover bg-center" style="background-image: url('/images/school-hero.jpg'), url('/images/hero-scenery.jpg')"></div>
-            <div class="absolute inset-0 -z-10 bg-gradient-to-r from-[#0a4d1a]/95 via-[#0d6b25]/85 to-[#0d6b25]/55"></div>
+            <div class="absolute inset-0 -z-10 bg-gradient-to-r from-[#0a4d1a]/92 via-[#0d6b25]/72 to-[#0d6b25]/38"></div>
             <div class="absolute inset-x-0 bottom-0 -z-10 h-32 bg-gradient-to-t from-[#06330f]/80 to-transparent"></div>
 
             <div class="mx-auto grid max-w-6xl items-center gap-10 px-4 py-16 md:grid-cols-[1.4fr_1fr] md:py-24">
