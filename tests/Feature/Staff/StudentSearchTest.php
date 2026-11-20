@@ -10,9 +10,10 @@ function searchNames(array $filters): array
 }
 
 beforeEach(function () {
-    Student::factory()->create(['last_name' => 'Marasigan', 'first_name' => 'Arnel', 'lrn' => '900000000011']);
-    Student::factory()->create(['last_name' => 'Dela Cruz', 'first_name' => 'Maria', 'lrn' => '900000000012']);
-    Student::factory()->create(['last_name' => 'Santos', 'first_name' => 'Juan', 'lrn' => null]);
+    // Middle names are fixed: the factory picks random ones (even "Santos") that would tie in the ranking.
+    Student::factory()->create(['last_name' => 'Marasigan', 'first_name' => 'Arnel', 'middle_name' => null, 'lrn' => '900000000011']);
+    Student::factory()->create(['last_name' => 'Dela Cruz', 'first_name' => 'Maria', 'middle_name' => null, 'lrn' => '900000000012']);
+    Student::factory()->create(['last_name' => 'Santos', 'first_name' => 'Juan', 'middle_name' => null, 'lrn' => null]);
 });
 
 it('finds a student by LRN prefix', function () {
