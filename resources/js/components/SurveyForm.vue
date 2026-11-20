@@ -24,7 +24,6 @@ const stars = [
     <Card>
         <CardHeader>
             <CardTitle>How was our service?</CardTitle>
-            <CardDescription>Your answers help the school improve. You can write in English or Tagalog.</CardDescription>
         </CardHeader>
         <CardContent>
             <form class="grid max-w-xl gap-3" @submit.prevent="form.post(props.action, { preserveScroll: true })">

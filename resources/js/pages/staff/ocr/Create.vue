@@ -71,10 +71,6 @@ function submit(): void {
 
     <div class="max-w-xl p-4">
         <h1 class="text-2xl font-semibold">Upload a scanned record</h1>
-        <p class="mb-4 text-sm text-muted-foreground">
-            The text is read automatically ({{ engine.runsOnServer ? 'on the server by ' + engine.name : "in your browser, nothing is sent to a third party" }}).
-            You check every field before a record is created. Photos and PDFs up to {{ Math.round(maxKb / 1024) }} MB.
-        </p>
 
         <form class="grid gap-4" @submit.prevent="submit">
             <div class="grid gap-2">
@@ -88,7 +84,6 @@ function submit(): void {
                 <div class="mt-1 h-2 w-full overflow-hidden bg-muted">
                     <div class="h-full bg-primary transition-all" :style="{ width: progress + '%' }"></div>
                 </div>
-                <p class="mt-1 text-muted-foreground">The first scan downloads the language data and can take a minute.</p>
             </div>
             <p v-else-if="status && status !== 'done'" class="text-sm text-amber-600">{{ status }}</p>
             <p v-else-if="status === 'done'" class="text-sm text-green-600">Text found. Continue to check the fields.</p>

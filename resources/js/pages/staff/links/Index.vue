@@ -28,10 +28,6 @@ function review(id: number, action: 'approve' | 'reject'): void {
     <div class="flex flex-1 flex-col gap-4 p-4">
         <div>
             <h1 class="text-2xl font-semibold">Account link approvals</h1>
-            <p class="text-sm text-muted-foreground">
-                People who registered and asked to see a student record (not document requests). The LRN and birthdate already matched; confirm the person is
-                really the learner or their parent or guardian before approving.
-            </p>
         </div>
 
         <div class="overflow-x-auto border">

@@ -81,7 +81,7 @@ const onRegister = computed(() => path.value === '/register');
 
                 <div class="mt-6 space-y-1">
                     <h1 class="font-serif text-2xl font-bold">{{ title }}</h1>
-                    <p class="text-sm text-muted-foreground">{{ description }}</p>
+                    <p v-if="description" class="text-sm text-muted-foreground">{{ description }}</p>
                 </div>
 
                 <div class="mt-6">

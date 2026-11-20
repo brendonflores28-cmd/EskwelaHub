@@ -56,9 +56,6 @@ const titles = {
         <Card v-if="portal === 'student'">
             <CardHeader>
                 <CardTitle>Your school records</CardTitle>
-                <CardDescription>
-                    Link your account to a student record to see it here. The registrar confirms each link.
-                </CardDescription>
             </CardHeader>
             <CardContent>
                 <Button as-child><Link href="/my-records">Open my records</Link></Button>

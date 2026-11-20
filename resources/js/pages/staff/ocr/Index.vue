@@ -21,7 +21,6 @@ defineOptions({
         <div class="flex items-center justify-between">
             <div>
                 <h1 class="text-2xl font-semibold">Digitize old records</h1>
-                <p class="text-sm text-muted-foreground">Upload a scan, check the text, create the record.</p>
             </div>
             <Button as-child>
                 <Link href="/staff/ocr/create"><Upload class="size-4" /> Upload a scan</Link>

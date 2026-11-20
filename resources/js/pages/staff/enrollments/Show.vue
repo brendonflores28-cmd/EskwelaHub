@@ -58,12 +58,12 @@ const sectionOptions = computed(() => props.sections.map((s) => ({ value: s.id, 
             <CardHeader><CardTitle>Decision</CardTitle></CardHeader>
             <CardContent class="space-y-3">
                 <div class="grid max-w-xl gap-2">
-                    <Label for="note">Note to the applicant (required to reject)</Label>
+                    <Label for="note">Note (required to reject)</Label>
                     <Input id="note" v-model="decision.note" maxlength="500" />
                     <InputError :message="decision.errors.note" />
                 </div>
                 <div class="grid max-w-xl gap-2">
-                    <Label>Class section (optional, you can also do it later in Class sections)</Label>
+                    <Label>Class section</Label>
                     <NativeSelect v-model="decision.section_id" :options="sectionOptions" placeholder="No section yet" />
                     <p v-if="sections.length === 0" class="text-xs text-muted-foreground">
                         There is no section for Grade {{ a.grade_level }} yet. Create one under Class sections.

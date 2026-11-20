@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Head, Link, router } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
 import { ref, watch } from 'vue';
 import NativeSelect from '@/components/NativeSelect.vue';
 import SimplePagination from '@/components/SimplePagination.vue';
@@ -57,11 +57,6 @@ const toOptions = (items: string[]) => items.map((i) => ({ value: i, label: i })
     <div class="flex flex-1 flex-col gap-4 p-4">
         <div>
             <h1 class="text-2xl font-semibold">Audit trail</h1>
-            <p class="text-sm text-muted-foreground">
-                What people did inside the system: who viewed, changed, requested, approved or released which record.
-                Sign-ins, logouts and registrations are in the
-                <Link href="/admin/session-logs" class="underline">Session logs</Link>.
-            </p>
         </div>
 
         <div class="grid max-w-lg gap-2 md:grid-cols-2">

@@ -58,9 +58,6 @@ function submit(): void {
         <Card>
             <CardHeader>
                 <CardTitle>Link a student record</CardTitle>
-                <CardDescription>
-                    Enter the learner's LRN and birthdate. The registrar will confirm before you can see the record.
-                </CardDescription>
             </CardHeader>
             <CardContent>
                 <form class="grid max-w-xl gap-3 md:grid-cols-3" @submit.prevent="submit">

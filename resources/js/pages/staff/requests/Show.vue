@@ -76,7 +76,7 @@ function approve(): void {
             <CardHeader><CardTitle>Actions</CardTitle></CardHeader>
             <CardContent class="space-y-4">
                 <div v-if="can('approved') || can('rejected')" class="grid max-w-xl gap-2">
-                    <Label for="note">Note to the requester (required to reject)</Label>
+                    <Label for="note">Note (required to reject)</Label>
                     <Input id="note" v-model="decision.note" maxlength="500" />
                     <InputError :message="decision.errors.note" />
                 </div>
@@ -99,7 +99,7 @@ function approve(): void {
                 </div>
 
                 <p v-if="r.status === 'processing' || r.status === 'approved'" class="text-sm text-muted-foreground">
-                    The PDF is made by the queue (about one minute on the server). Reload this page to see the new status.
+                    Generating the PDF. Reload to see the new status.
                 </p>
             </CardContent>
         </Card>

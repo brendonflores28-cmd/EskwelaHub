@@ -101,7 +101,6 @@ function remove(): void {
             <Card>
                 <CardHeader>
                     <CardTitle>Class list</CardTitle>
-                    <CardDescription>Learners in this section.</CardDescription>
                 </CardHeader>
                 <CardContent class="space-y-3">
                     <table class="w-full text-sm">
@@ -141,7 +140,6 @@ function remove(): void {
                 <CardHeader>
                     <CardTitle>Without a section</CardTitle>
                     <CardDescription>
-                        Grade {{ section.grade_level }} learners of {{ section.school_year }} who have no section yet.
                         <span v-if="seatsLeft !== null">{{ seatsLeft }} place(s) left here.</span>
                     </CardDescription>
                 </CardHeader>

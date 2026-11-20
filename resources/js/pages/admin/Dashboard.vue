@@ -101,7 +101,7 @@ const pct = (n: number) => Math.round((n / sentimentTotal.value) * 100);
         <Card>
             <CardHeader>
                 <CardTitle>Enrollment forecast</CardTitle>
-                <CardDescription>Solid bars are finished school years. Dashed bars are the forecast.</CardDescription>
+                <CardDescription>Dashed bars are the forecast.</CardDescription>
             </CardHeader>
             <CardContent class="space-y-3">
                 <BarChart v-if="metrics.forecast.enough_data" :items="forecastItems" />
@@ -117,7 +117,6 @@ const pct = (n: number) => Math.round((n / sentimentTotal.value) * 100);
             <Card>
                 <CardHeader>
                     <CardTitle>Enrollment per school year</CardTitle>
-                    <CardDescription>Learners enrolled (current year highlighted).</CardDescription>
                 </CardHeader>
                 <CardContent><BarChart :items="enrollmentItems" /></CardContent>
             </Card>
@@ -135,7 +134,6 @@ const pct = (n: number) => Math.round((n / sentimentTotal.value) * 100);
             <Card>
                 <CardHeader>
                     <CardTitle>Senior high by strand</CardTitle>
-                    <CardDescription>Learners of Grades 11 and 12 this school year.</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <BarChart v-if="strandItems.length" :items="strandItems" />
@@ -150,8 +148,7 @@ const pct = (n: number) => Math.round((n / sentimentTotal.value) * 100);
 
             <Card>
                 <CardHeader>
-                    <CardTitle>Document requests per month</CardTitle>
-                    <CardDescription>Last 12 months.</CardDescription>
+                    <CardTitle>Document requests per month (last 12 months)</CardTitle>
                 </CardHeader>
                 <CardContent><BarChart :items="monthItems" /></CardContent>
             </Card>

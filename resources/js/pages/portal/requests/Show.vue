@@ -37,14 +37,12 @@ defineOptions({
         <Card v-if="canDownload">
             <CardHeader><CardTitle>Your document</CardTitle></CardHeader>
             <CardContent class="space-y-2 text-sm">
-                <p>The registrar released your document. The download link works for two minutes after you click.</p>
                 <Button as-child>
                     <a :href="`/documents/request/${r.id}`"><Download class="size-4" /> Download PDF</a>
                 </Button>
             </CardContent>
         </Card>
-        <p v-else-if="r.status === 'ready'" class="text-sm text-muted-foreground">
-            Your document is ready. You can download it as soon as the registrar releases it.
+        <p v-else-if="r.status === 'ready'" class="text-sm text-muted-foreground"> Ready for release.
         </p>
 
         <SurveyForm v-if="canSurvey" :action="`/my-requests/${r.id}/survey`" />

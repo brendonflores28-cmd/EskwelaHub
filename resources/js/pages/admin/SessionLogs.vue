@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Head, Link, router } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
 import { ref, watch } from 'vue';
 import NativeSelect from '@/components/NativeSelect.vue';
 import SimplePagination from '@/components/SimplePagination.vue';
@@ -64,11 +64,6 @@ const variant = (e: string) => (e === 'login_failed' || e === 'locked_out' || e 
     <div class="flex flex-1 flex-col gap-4 p-4">
         <div>
             <h1 class="text-2xl font-semibold">Session logs</h1>
-            <p class="text-sm text-muted-foreground">
-                Sign-in events only: login, logout, registration, failed login, password reset and two-step codes. Passwords are never stored.
-                What people do inside the system is in the
-                <Link href="/admin/audit-log" class="underline">Audit trail</Link>.
-            </p>
         </div>
 
         <div class="grid gap-4 sm:grid-cols-3">

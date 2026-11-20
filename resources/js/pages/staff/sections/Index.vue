@@ -56,7 +56,6 @@ function save(): void {
         <div class="flex flex-wrap items-end justify-between gap-2">
             <div>
                 <h1 class="text-2xl font-semibold">Class sections</h1>
-                <p class="text-sm text-muted-foreground">Sections of each grade, with the adviser and the class list. All learners follow the K to 12 curriculum.</p>
             </div>
             <div class="w-48">
                 <Label class="mb-1 block text-xs">School year</Label>

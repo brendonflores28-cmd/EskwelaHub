@@ -70,7 +70,7 @@ const pending = props.draft.status === 'pending';
         <div>
             <h1 class="text-2xl font-semibold">Check scanned record</h1>
             <p class="text-sm text-muted-foreground">
-                {{ draft.file }}. The fields below are guesses from the scan. Compare them with the image and fix any mistake before saving.
+                {{ draft.file }}
             </p>
         </div>
 

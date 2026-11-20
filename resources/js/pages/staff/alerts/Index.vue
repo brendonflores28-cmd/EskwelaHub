@@ -34,7 +34,6 @@ function merge(flagId: number, keep: number, other: string): void {
         <div class="flex flex-wrap items-center justify-between gap-2">
             <div>
                 <h1 class="text-2xl font-semibold">Record alerts</h1>
-                <p class="text-sm text-muted-foreground">Possible duplicates and incomplete records. The check runs every night.</p>
             </div>
             <Button variant="outline" @click="router.post('/staff/alerts/scan')"><ScanSearch class="size-4" /> Check now</Button>
         </div>

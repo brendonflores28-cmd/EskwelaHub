@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Head, Link, usePage } from '@inertiajs/vue3';
-import { ClipboardCheck, FileText, GraduationCap, Mail, MapPin, Phone, QrCode, ShieldCheck, UserPlus } from '@lucide/vue';
+import { FileText, GraduationCap, Mail, MapPin, Phone, QrCode, ShieldCheck, UserPlus } from '@lucide/vue';
 import { dashboard, login, register } from '@/routes';
 
 /**
@@ -121,9 +121,6 @@ const steps = [
                         <p class="mt-1 text-sm text-muted-foreground">{{ s.text }}</p>
                     </li>
                 </ol>
-                <p class="mt-8 flex items-center justify-center gap-2 text-sm text-muted-foreground">
-                    <ClipboardCheck class="size-4" /> The registrar and the principal sign in with two-step verification.
-                </p>
             </div>
         </section>
 

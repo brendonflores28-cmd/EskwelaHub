@@ -57,8 +57,7 @@ function submit(): void {
     <div class="max-w-3xl p-4">
         <h1 class="text-2xl font-semibold">Online enrollment form</h1>
         <p class="mb-4 text-sm text-muted-foreground">
-            School year {{ schoolYear ?? '(not open yet)' }}. Upload clear photos or PDFs, 5 MB at most each. The registrar
-            reviews every form; you will get an email when it is decided.
+            School year {{ schoolYear ?? '(not open yet)' }}
         </p>
 
         <p v-if="!schoolYear" class="border p-4 text-sm">Enrollment is not open right now.</p>

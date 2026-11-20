@@ -25,9 +25,6 @@ defineProps<{
                 <div class="flex justify-between"><dt class="text-muted-foreground">Learner</dt><dd>{{ document.learner }}</dd></div>
                 <div class="flex justify-between"><dt class="text-muted-foreground">Issued</dt><dd>{{ document.issued_on }}</dd></div>
             </dl>
-            <p class="mt-4 text-xs text-muted-foreground">
-                Compare these details with the printed copy. The learner's name is hidden on purpose.
-            </p>
         </div>
 
         <div v-else class="border border-red-600/40 bg-red-50 p-6 text-center dark:bg-red-950/30">

@@ -34,7 +34,6 @@ const handleRegisterSuccess = () => {
         <Heading
             variant="small"
             title="Passkeys"
-            description="Manage your passkeys for passwordless sign-in"
         />
 
         <div class="overflow-hidden border border-border">
