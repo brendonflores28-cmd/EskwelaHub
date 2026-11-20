@@ -67,3 +67,29 @@ export type DocumentRequest = {
     has_document?: boolean;
     history?: HistoryEntry[];
 };
+
+export type EnrollmentForm = {
+    id: number;
+    reference_no: string;
+    type: string;
+    type_label: string;
+    grade_level: number;
+    status: string;
+    status_label: string;
+    decision_note: string | null;
+    full_name: string;
+    lrn: string | null;
+    sex: string;
+    birthdate: string;
+    birthplace: string | null;
+    address: string;
+    guardian_name: string;
+    guardian_contact: string;
+    previous_school: string | null;
+    relationship: string;
+    school_year?: string;
+    student_id: number | null;
+    created_at: string;
+    applicant?: { name: string; email: string };
+    documents?: { id: number; kind: string; original_name: string; size_kb: number }[];
+};

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Link, usePage } from '@inertiajs/vue3';
-import { ClipboardList, FileText, GraduationCap, LayoutGrid, ScrollText, UserCheck } from '@lucide/vue';
+import { ClipboardList, FileText, GraduationCap, ScanLine, UserPlus, LayoutGrid, ScrollText, UserCheck } from '@lucide/vue';
 import { computed } from 'vue';
 import AppLogo from '@/components/AppLogo.vue';
 import NavMain from '@/components/NavMain.vue';
@@ -33,8 +33,14 @@ const mainNavItems = computed<NavItem[]>(() => {
     if (can.processRequests) {
         items.push({ title: 'Document requests', href: '/staff/requests', icon: FileText });
     }
+    if (can.reviewEnrollments) {
+        items.push({ title: 'Enrollment forms', href: '/staff/enrollments', icon: UserPlus });
+    }
+    if (can.useOcr) {
+        items.push({ title: 'Digitize records', href: '/staff/ocr', icon: ScanLine });
+    }
     if (can.reviewLinks) {
-        items.push({ title: 'Link requests', href: '/staff/links', icon: UserCheck });
+        items.push({ title: 'Account link approvals', href: '/staff/links', icon: UserCheck });
     }
     if (can.viewAudit) {
         items.push({ title: 'Audit log', href: '/admin/audit-log', icon: ScrollText });
@@ -42,6 +48,7 @@ const mainNavItems = computed<NavItem[]>(() => {
     if (!can.viewStudents) {
         items.push({ title: 'My records', href: '/my-records', icon: ClipboardList });
         items.push({ title: 'My requests', href: '/my-requests', icon: FileText });
+        items.push({ title: 'Enrollment', href: '/my-enrollments', icon: UserPlus });
     }
 
     return items;

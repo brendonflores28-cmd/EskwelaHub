@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import { Head, Link, router } from '@inertiajs/vue3';
 import { Button } from '@/components/ui/button';
 
@@ -26,9 +26,9 @@ function review(id: number, action: 'approve' | 'reject'): void {
 
     <div class="flex flex-1 flex-col gap-4 p-4">
         <div>
-            <h1 class="text-2xl font-semibold">Link requests</h1>
+            <h1 class="text-2xl font-semibold">Account link approvals</h1>
             <p class="text-sm text-muted-foreground">
-                Accounts asking to see a student record. The LRN and birthdate already matched; confirm the person is
+                People who registered and asked to see a student record (not document requests). The LRN and birthdate already matched; confirm the person is
                 really the learner or their parent or guardian before approving.
             </p>
         </div>

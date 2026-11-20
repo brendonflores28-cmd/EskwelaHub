@@ -19,6 +19,8 @@ export type Auth = {
         reviewLinks: boolean;
         viewAudit: boolean;
         processRequests: boolean;
+        reviewEnrollments: boolean;
+        useOcr: boolean;
     };
 };
 

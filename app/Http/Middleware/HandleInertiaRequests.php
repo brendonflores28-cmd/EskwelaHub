@@ -47,6 +47,8 @@ class HandleInertiaRequests extends Middleware
                     'reviewLinks' => $request->user()?->can('links.review') ?? false,
                     'viewAudit' => $request->user()?->can('audit.view') ?? false,
                     'processRequests' => $request->user()?->can('requests.view') ?? false,
+                    'reviewEnrollments' => $request->user()?->can('enrollments.view') ?? false,
+                    'useOcr' => $request->user()?->can('ocr.use') ?? false,
                 ],
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',

@@ -26,6 +26,9 @@ class RolePermissionSeeder extends Seeder
             'audit.view',       // read the audit log
             'requests.view',    // see all document requests
             'requests.process', // review, approve, reject, release document requests
+            'enrollments.view',     // see online enrollment forms
+            'enrollments.process',  // review, approve, reject enrollment forms
+            'ocr.use',              // upload scans and verify OCR drafts
         ];
 
         foreach ($permissions as $name) {
@@ -35,7 +38,7 @@ class RolePermissionSeeder extends Seeder
         RoleModel::findOrCreate(Role::StudentParent->value, 'web');
 
         RoleModel::findOrCreate(Role::Staff->value, 'web')
-            ->syncPermissions(['students.view', 'students.manage', 'links.review', 'requests.view', 'requests.process']);
+            ->syncPermissions(['students.view', 'students.manage', 'links.review', 'requests.view', 'requests.process', 'enrollments.view', 'enrollments.process', 'ocr.use']);
 
         RoleModel::findOrCreate(Role::Admin->value, 'web')
             ->syncPermissions($permissions);

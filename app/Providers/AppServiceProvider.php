@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Contracts\OcrEngine;
+use App\Services\Ocr\BrowserOcrEngine;
+use App\Services\Ocr\OcrSpaceEngine;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -15,7 +18,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // The OCR engine is chosen by OCR_DRIVER in .env (see config/ocr.php).
+        $this->app->bind(OcrEngine::class, fn () => match (config('ocr.driver')) {
+            'ocr_space' => new OcrSpaceEngine,
+            default => new BrowserOcrEngine,
+        });
     }
 
     /**

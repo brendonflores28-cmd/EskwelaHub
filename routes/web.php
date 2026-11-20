@@ -3,10 +3,14 @@
 use App\Http\Controllers\Admin\AuditLogController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentDownloadController;
+use App\Http\Controllers\EnrollmentDocumentController;
 use App\Http\Controllers\Portal\DocumentRequestController as PortalDocumentRequestController;
+use App\Http\Controllers\Portal\EnrollmentController;
 use App\Http\Controllers\Portal\MyRecordsController;
 use App\Http\Controllers\Staff\DocumentRequestController as StaffDocumentRequestController;
+use App\Http\Controllers\Staff\EnrollmentApplicationController;
 use App\Http\Controllers\Staff\LinkRequestController;
+use App\Http\Controllers\Staff\OcrController;
 use App\Http\Controllers\Staff\StudentController;
 use App\Http\Controllers\Staff\StudentEnrollmentController;
 use App\Http\Controllers\VerifyDocumentController;
@@ -47,6 +51,44 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('documents/file/{document}', [DocumentDownloadController::class, 'file'])
         ->middleware('signed')
         ->name('documents.file');
+
+    // Online enrollment (parent or learner).
+    Route::prefix('my-enrollments')->name('portal.enrollments.')->group(function () {
+        Route::get('/', [EnrollmentController::class, 'index'])->name('index');
+        Route::get('create', [EnrollmentController::class, 'create'])->name('create');
+        Route::post('/', [EnrollmentController::class, 'store'])->middleware('throttle:5,1')->name('store');
+        Route::get('{application}', [EnrollmentController::class, 'show'])->name('show');
+    });
+
+    // Uploaded enrollment documents: policy check, then a 2-minute signed link.
+    Route::get('enrollment-documents/request/{document}', [EnrollmentDocumentController::class, 'request'])
+        ->name('enrollment-documents.request');
+    Route::get('enrollment-documents/file/{document}', [EnrollmentDocumentController::class, 'file'])
+        ->middleware('signed')
+        ->name('enrollment-documents.file');
+
+    // Registrar: online enrollment forms.
+    Route::middleware(['permission:enrollments.view', 'two-factor'])
+        ->prefix('staff/enrollments')->name('staff.enrollments.')->group(function () {
+            Route::get('/', [EnrollmentApplicationController::class, 'index'])->name('index');
+            Route::get('{application}', [EnrollmentApplicationController::class, 'show'])->name('show');
+            Route::post('{application}/review', [EnrollmentApplicationController::class, 'review'])->name('review');
+            Route::post('{application}/approve', [EnrollmentApplicationController::class, 'approve'])->name('approve');
+            Route::post('{application}/reject', [EnrollmentApplicationController::class, 'reject'])->name('reject');
+        });
+
+    // Digitize old records: upload a scan, check the text, create the record.
+    Route::middleware(['permission:ocr.use', 'two-factor'])->group(function () {
+        Route::prefix('staff/ocr')->name('staff.ocr.')->group(function () {
+            Route::get('/', [OcrController::class, 'index'])->name('index');
+            Route::get('create', [OcrController::class, 'create'])->name('create');
+            Route::post('/', [OcrController::class, 'store'])->middleware('throttle:30,1')->name('store');
+            Route::get('{draft}', [OcrController::class, 'show'])->name('show');
+            Route::post('{draft}/verify', [OcrController::class, 'verify'])->name('verify');
+            Route::post('{draft}/reject', [OcrController::class, 'reject'])->name('reject');
+        });
+        Route::get('scans/file/{scan}', [OcrController::class, 'scanFile'])->middleware('signed')->name('scans.file');
+    });
 
     // Registrar: document requests.
     Route::middleware(['permission:requests.view', 'two-factor'])
