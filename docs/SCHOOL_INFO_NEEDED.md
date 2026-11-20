@@ -67,6 +67,10 @@ The chatbot answers only what is written in its FAQ table. Please give the schoo
 - [ ] Who to contact for complaints and for technical problems
 - [ ] Any announcement channel besides Facebook
 
+### H. Photos and branding
+- [ ] A wide, good-quality **photo of the school** (building or grounds) for the home page, with the school's permission to use it. Save it as `public/images/school-hero.jpg` (1600 px wide or more); the green cover is added by the page. Until then the page shows a backdrop made from the school seal.
+- [ ] The official seal as a high-resolution file with transparent background, if the school has one
+
 ### G. Technology
 - [ ] Who will **host and maintain** the system (the school's ICT coordinator, the capstone group, a company)?
 - [ ] Hosting plan on Hostinger, the **PHP version** offered (needs 8.3 or higher), and the web address (subdomain) the school wants

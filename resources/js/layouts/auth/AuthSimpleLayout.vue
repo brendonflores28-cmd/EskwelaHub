@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
 import AppLogoIcon from '@/components/AppLogoIcon.vue';
 import { home } from '@/routes';
 
@@ -7,6 +7,8 @@ defineProps<{
     title?: string;
     description?: string;
 }>();
+
+const school = usePage().props.school;
 </script>
 
 <template>
@@ -29,6 +31,8 @@ defineProps<{
                         </div>
                         <span class="sr-only">{{ title }}</span>
                     </Link>
+                    <p class="-mt-2 text-center font-serif text-sm font-semibold tracking-wide">{{ school.name }}</p>
+                    <div class="-mt-2 h-px w-16 bg-gold"></div>
                     <div class="space-y-2 text-center">
                         <h1 class="text-xl font-medium">{{ title }}</h1>
                         <p class="text-center text-sm text-muted-foreground">

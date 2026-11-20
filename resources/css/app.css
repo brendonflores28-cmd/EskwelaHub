@@ -13,6 +13,10 @@
         'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
         'Noto Color Emoji';
 
+    /* Headings use a classic serif face for a formal, academic look (system fonts: nothing to download). */
+    --font-serif: Georgia, Cambria, 'Times New Roman', 'Noto Serif', serif;
+    --color-gold: #c9a227; /* the gold of academic ribbons: thin rules and small accents */
+
     --radius-lg: var(--radius);
     --radius-md: calc(var(--radius) - 2px);
     --radius-sm: calc(var(--radius) - 4px);
@@ -139,5 +143,11 @@
 
     body {
         @apply bg-background text-foreground;
+    }
+
+    h1,
+    h2 {
+        font-family: var(--font-serif);
+        letter-spacing: -0.005em;
     }
 }

@@ -8,7 +8,7 @@ const page = usePage();
 <template>
     <AppLogoIcon class-name="size-9 shrink-0" />
     <div class="ml-1 grid flex-1 text-left text-sm">
-        <span class="truncate leading-tight font-semibold">{{ page.props.name }}</span>
+        <span class="truncate font-serif leading-tight font-bold">{{ page.props.name }}</span>
         <span class="truncate text-[11px] leading-tight text-muted-foreground">{{ page.props.school.short_name }}</span>
     </div>
 </template>
