@@ -7,6 +7,7 @@ use App\Enums\StudentStatus;
 use App\Models\SchoolYear;
 use App\Models\Section;
 use App\Models\Student;
+use App\Services\Duplicates\DuplicateDetector;
 use Illuminate\Database\Seeder;
 
 /**
@@ -47,6 +48,9 @@ class SchoolDataSeeder extends Seeder
             'middle_name' => null,
             'birthdate' => $original->birthdate->toDateString(),
         ]);
+
+        // The nightly job does this in production; run it once so the demo shows the alert.
+        app(DuplicateDetector::class)->scan();
     }
 
     /** School year starts in June: before June the current school year began last year. */

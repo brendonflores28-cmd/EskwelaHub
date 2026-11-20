@@ -86,7 +86,7 @@ it('can be replaced through the interface (for example with a language model)', 
     {
         public function respond(string $question): ChatReply
         {
-            return new ChatReply('From another engine', 1);
+            return new ChatReply('From another engine', FaqEntry::query()->value('id'));
         }
     });
 

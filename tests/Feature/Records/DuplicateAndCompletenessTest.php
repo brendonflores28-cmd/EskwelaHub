@@ -15,7 +15,8 @@ use Spatie\Activitylog\Models\Activity;
 function twin(array $overrides = []): Student
 {
     return Student::factory()->create(array_merge([
-        'last_name' => 'Marasigan', 'first_name' => 'Arnel', 'middle_name' => null, 'birthdate' => '2008-04-12',
+        // Middle name and suffix are fixed: the factory picks random ones that would change the name match.
+        'last_name' => 'Marasigan', 'first_name' => 'Arnel', 'middle_name' => null, 'suffix' => null, 'birthdate' => '2008-04-12',
     ], $overrides));
 }
 
@@ -29,6 +30,13 @@ it('flags two records with the same birthdate and a very similar name', function
     expect([$flag->student_a_id, $flag->student_b_id])->toBe([$a->id, $b->id])
         ->and((float) $flag->score)->toBeGreaterThanOrEqual(0.85)
         ->and($flag->status)->toBe('open');
+});
+
+it('flags a record that only lacks the middle name', function () {
+    twin(['middle_name' => 'Lopez']);
+    twin(['first_name' => 'Arnel', 'middle_name' => null]);
+
+    expect(app(DuplicateDetector::class)->scan())->toBe(1);
 });
 
 it('does not flag different birthdates or different names', function () {

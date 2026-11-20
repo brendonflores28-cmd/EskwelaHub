@@ -23,6 +23,12 @@ class GenerateDocumentPdf implements ShouldBeUnique, ShouldQueue
 
     public int $tries = 3;
 
+    /**
+     * The "one job per request" lock expires after 5 minutes. Without this, a worker that crashed
+     * (or a cache that was not cleared) would block the request for good: the lock never expired.
+     */
+    public int $uniqueFor = 300;
+
     public function __construct(public int $requestId) {}
 
     /** One job per request at a time. */

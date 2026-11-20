@@ -106,6 +106,8 @@ php -v                       # must say 8.3 or higher; if not, use the PHP path 
 php artisan key:generate --force
 php artisan migrate --force
 php artisan db:seed --class=RolePermissionSeeder --force   # roles and permissions only, no fake data
+php artisan db:seed --class=FaqSeeder --force              # starter chatbot answers (the school must review them)
+php artisan eskwelahub:school-year 2026 --current          # the school year that is open for enrollment (change the year)
 php artisan eskwelahub:create-user principal@yourschool.example admin --name="Full Name"
 php artisan storage:link     # only needed if you later publish files in storage/app/public; the app keeps records in private storage
 php artisan config:cache
@@ -180,3 +182,16 @@ Student records are the most important data in the system.
 | "Class not found" after upload | upload `vendor/` again; run `composer dump-autoload -o` |
 | Emails never arrive | SMTP values; the cron job (emails are queued); `jobs` and `failed_jobs` tables |
 | Cannot reach staff pages | the account needs 2FA turned on (Settings, Security) |
+
+## 9. Features that need extra care on shared hosting
+
+| Feature | What to know |
+|---|---|
+| **School years** | Enrollment needs one current school year. At the start of each school year run `php artisan eskwelahub:school-year 2027 --current` (use the new start year). |
+| **Queue and cron** | PDFs, emails and the nightly duplicate check run from the queue. If the cron job stops, nothing is generated and no email is sent. Check `jobs` and `failed_jobs` in phpMyAdmin when something seems stuck. |
+| **OCR (digitizing old records)** | The default engine, Tesseract.js, runs in the staff member's browser and downloads its language data from a public CDN the first time, so the staff computer needs internet. Nothing from the scan is sent to a third party. Set `OCR_DRIVER=ocr_space` and `OCR_SPACE_KEY` only if the school agrees to send scans to that service. |
+| **PDF fonts** | PDFs use the built-in Helvetica font, so they are small (about 5 to 20 KB). |
+| **Excel export** | Needs the PHP extensions `zip`, `xml` and `gd` (listed in section 0). If the download fails with a 500 error, check them in hPanel. |
+| **FAQ chatbot** | Answers live in the table `faq_entries`. The school must review them before go-live: fees, dates and office hours are intentionally not included. |
+| **Private files** | Uploads, scans and PDFs are in `storage/app/private`. Include this folder in every backup (section 7) and never move it into `public`. |
+| **Unique job locks** | The PDF job uses a lock that expires after 5 minutes, so a crashed worker cannot block a request for ever. After 5 minutes the staff "Generate PDF again" button works again. |

@@ -29,7 +29,7 @@ class EnrollmentForecaster
         $history = SchoolYear::query()
             ->withCount('enrollments')
             ->when($current, fn ($q) => $q->where('start_year', '<', $current))
-            ->where('enrollments_count', '>', 0)
+            ->has('enrollments') // only school years with learners (a column alias cannot be used in WHERE on MySQL)
             ->orderByDesc('start_year')
             ->limit(self::YEARS_BACK)
             ->get()

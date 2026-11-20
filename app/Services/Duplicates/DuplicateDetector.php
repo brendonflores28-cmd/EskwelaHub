@@ -77,12 +77,16 @@ class DuplicateDetector
             ->values();
     }
 
-    /** Symmetric similarity of two name keys: the lower of the two directional scores. */
+    /**
+     * Similarity of two name keys: the better of the two directional scores.
+     * That way "Santos Juan" still matches "Santos Juan Reyes" (a missing
+     * middle name), while the same birthdate keeps the check strict enough.
+     */
     public function similarity(string $keyA, string $keyB): float
     {
         $a = $keyA === '' ? [] : explode(' ', $keyA);
         $b = $keyB === '' ? [] : explode(' ', $keyB);
 
-        return min(NameIndex::score($a, $b), NameIndex::score($b, $a));
+        return max(NameIndex::score($a, $b), NameIndex::score($b, $a));
     }
 }

@@ -5,7 +5,9 @@
     <title>{{ $request->request_no }}</title>
     <style>
         @page { margin: 36px 48px; }
-        body { font-family: DejaVu Sans, sans-serif; font-size: 11px; color: #111; }
+        /* Helvetica is built into PDF readers, so no font is embedded (a PDF is about 20 KB, not 900 KB).
+           It covers Filipino names with n-tilde. */
+        body { font-family: Helvetica, Arial, sans-serif; font-size: 11px; color: #111; }
         .center { text-align: center; }
         .school { font-size: 15px; font-weight: bold; margin: 0; }
         .muted { color: #555; }
