@@ -61,7 +61,7 @@ function submit(): void {
             reviews every form; you will get an email when it is decided.
         </p>
 
-        <p v-if="!schoolYear" class="rounded-lg border p-4 text-sm">Enrollment is not open right now.</p>
+        <p v-if="!schoolYear" class="border p-4 text-sm">Enrollment is not open right now.</p>
 
         <form v-else class="grid gap-4 md:grid-cols-2" @submit.prevent="submit">
             <div class="grid gap-2">

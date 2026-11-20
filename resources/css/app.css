@@ -17,9 +17,15 @@
     --font-serif: Georgia, Cambria, 'Times New Roman', 'Noto Serif', serif;
     --color-gold: #c9a227; /* the gold of academic ribbons: thin rules and small accents */
 
-    --radius-lg: var(--radius);
-    --radius-md: calc(var(--radius) - 2px);
-    --radius-sm: calc(var(--radius) - 4px);
+    /* No rounded corners anywhere: every radius step is zero. */
+    --radius-xs: 0;
+    --radius-sm: 0;
+    --radius-md: 0;
+    --radius-lg: 0;
+    --radius-xl: 0;
+    --radius-2xl: 0;
+    --radius-3xl: 0;
+    --radius-4xl: 0;
 
     --color-background: var(--background);
     --color-foreground: var(--foreground);
@@ -90,7 +96,7 @@
     --chart-3: oklch(0.398 0.07 227.392);
     --chart-4: oklch(0.828 0.189 84.429);
     --chart-5: oklch(0.769 0.188 70.08);
-    --radius: 0.625rem;
+    --radius: 0; /* square corners everywhere (academic, flat look) */
     --sidebar: oklch(0.36 0.09 148); /* deep school green */
     --sidebar-foreground: oklch(0.97 0.01 140);
     --sidebar-primary: oklch(0.85 0.16 90);

@@ -42,10 +42,10 @@ function merge(flagId: number, keep: number, other: string): void {
         <Card>
             <CardHeader><CardTitle>Possible duplicates ({{ duplicates.length }})</CardTitle></CardHeader>
             <CardContent class="space-y-3">
-                <div v-for="d in duplicates" :key="d.id" class="rounded-lg border p-3 text-sm">
+                <div v-for="d in duplicates" :key="d.id" class="border p-3 text-sm">
                     <div class="mb-2 text-muted-foreground">{{ d.reason }} - match {{ Math.round(d.score * 100) }}%</div>
                     <div class="grid gap-3 md:grid-cols-2">
-                        <div v-for="(s, i) in [d.a, d.b]" :key="s.id" class="rounded border p-2">
+                        <div v-for="(s, i) in [d.a, d.b]" :key="s.id" class="border p-2">
                             <Link :href="`/staff/students/${s.id}`" class="font-medium underline" target="_blank">{{ s.full_name }}</Link>
                             <div>Born {{ s.birthdate }}, LRN {{ s.lrn ?? 'none' }}</div>
                             <div class="text-muted-foreground">

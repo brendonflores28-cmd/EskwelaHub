@@ -18,7 +18,7 @@ defineProps<Props>();
         src="/images/cnhs-logo-96.png"
         srcset="/images/cnhs-logo-96.png 1x, /images/cnhs-logo-256.png 2x"
         alt="Cawayan National High School seal"
-        :class="['rounded-full object-contain', className]"
+        :class="[' object-contain', className]"
         v-bind="$attrs"
     />
 </template>

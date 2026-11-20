@@ -30,7 +30,7 @@ const copyOptions = [1, 2, 3, 4, 5].map((n) => ({ value: n, label: String(n) }))
     <div class="max-w-xl p-4">
         <h1 class="mb-4 text-2xl font-semibold">Request a document</h1>
 
-        <p v-if="students.length === 0" class="rounded-lg border p-4 text-sm">
+        <p v-if="students.length === 0" class="border p-4 text-sm">
             You need an approved student record first.
             <Link href="/my-records" class="underline">Link a record</Link> and wait for the registrar to approve it.
         </p>

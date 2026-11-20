@@ -108,7 +108,7 @@ function reset(): void {
         <!-- Chat panel -->
         <section
             v-if="open"
-            class="flex h-[min(32rem,calc(100vh-7rem))] w-[calc(100vw-2rem)] max-w-sm flex-col overflow-hidden rounded-2xl border bg-background text-foreground shadow-2xl"
+            class="flex h-[min(32rem,calc(100vh-7rem))] w-[calc(100vw-2rem)] max-w-sm flex-col overflow-hidden border bg-background text-foreground shadow-2xl"
             aria-label="Help assistant"
         >
             <header class="flex items-center justify-between gap-2 bg-primary px-4 py-3 text-primary-foreground">
@@ -120,8 +120,8 @@ function reset(): void {
                     </div>
                 </div>
                 <div class="flex items-center gap-1">
-                    <button type="button" class="rounded px-2 py-1 text-xs hover:bg-white/15" @click="reset">New chat</button>
-                    <button type="button" class="rounded p-1 hover:bg-white/15" aria-label="Close help" @click="open = false"><X class="size-4" /></button>
+                    <button type="button" class="px-2 py-1 text-xs hover:bg-white/15" @click="reset">New chat</button>
+                    <button type="button" class="p-1 hover:bg-white/15" aria-label="Close help" @click="open = false"><X class="size-4" /></button>
                 </div>
             </header>
 
@@ -129,7 +129,7 @@ function reset(): void {
                 <div v-for="(m, i) in messages" :key="i" :class="m.from === 'me' ? 'self-end' : 'self-start'" class="max-w-[88%]">
                     <div
                         :class="m.from === 'me' ? 'bg-primary text-primary-foreground' : 'bg-muted'"
-                        class="rounded-2xl px-3 py-2 text-sm whitespace-pre-line"
+                        class="px-3 py-2 text-sm whitespace-pre-line"
                     >
                         {{ m.text }}
                     </div>
@@ -138,7 +138,7 @@ function reset(): void {
                             v-for="s in m.suggestions"
                             :key="s.id"
                             type="button"
-                            class="rounded-full border px-3 py-1 text-left text-xs hover:bg-muted"
+                            class="border px-3 py-1 text-left text-xs hover:bg-muted"
                             @click="ask(s.question)"
                         >
                             {{ s.question }}
@@ -148,12 +148,12 @@ function reset(): void {
 
                 <!-- Starter questions, only before the first question -->
                 <div v-if="messages.length === 1" class="flex flex-wrap gap-1.5">
-                    <button v-for="s in starters" :key="s" type="button" class="rounded-full border px-3 py-1 text-left text-xs hover:bg-muted" @click="ask(s)">
+                    <button v-for="s in starters" :key="s" type="button" class="border px-3 py-1 text-left text-xs hover:bg-muted" @click="ask(s)">
                         {{ s }}
                     </button>
                 </div>
 
-                <div v-if="busy" class="self-start rounded-2xl bg-muted px-3 py-2 text-sm text-muted-foreground" aria-label="The assistant is typing">...</div>
+                <div v-if="busy" class="self-start bg-muted px-3 py-2 text-sm text-muted-foreground" aria-label="The assistant is typing">...</div>
             </div>
 
             <form class="flex gap-2 border-t p-3" @submit.prevent="ask(question)">
@@ -163,12 +163,12 @@ function reset(): void {
                     type="text"
                     maxlength="300"
                     placeholder="Type your question..."
-                    class="h-9 min-w-0 flex-1 rounded-full border border-input bg-transparent px-4 text-sm outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
+                    class="h-9 min-w-0 flex-1 border border-input bg-transparent px-4 text-sm outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
                 />
                 <button
                     type="submit"
                     :disabled="busy || !question.trim()"
-                    class="flex size-9 items-center justify-center rounded-full bg-primary text-primary-foreground disabled:opacity-50"
+                    class="flex size-9 items-center justify-center bg-primary text-primary-foreground disabled:opacity-50"
                     aria-label="Send question"
                 >
                     <Send class="size-4" />
@@ -180,7 +180,7 @@ function reset(): void {
         <!-- Floating round button -->
         <button
             type="button"
-            class="flex size-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition hover:scale-105 focus-visible:ring-4 focus-visible:ring-ring/50 focus-visible:outline-none"
+            class="flex size-14 items-center justify-center bg-primary text-primary-foreground shadow-lg transition hover:scale-105 focus-visible:ring-4 focus-visible:ring-ring/50 focus-visible:outline-none"
             :aria-label="open ? 'Close help assistant' : 'Open help assistant'"
             :aria-expanded="open"
             @click="toggle"

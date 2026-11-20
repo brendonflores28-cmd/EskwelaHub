@@ -96,7 +96,7 @@ function archive(): void {
         <Card>
             <CardHeader><CardTitle>Enrollment history</CardTitle></CardHeader>
             <CardContent class="space-y-4">
-                <div class="overflow-x-auto rounded-lg border">
+                <div class="overflow-x-auto border">
                     <table class="w-full text-sm">
                         <thead class="bg-muted/50 text-left">
                             <tr>

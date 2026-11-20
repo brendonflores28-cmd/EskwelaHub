@@ -33,7 +33,7 @@ function review(id: number, action: 'approve' | 'reject'): void {
             </p>
         </div>
 
-        <div class="overflow-x-auto rounded-xl border">
+        <div class="overflow-x-auto border">
             <table class="w-full text-sm">
                 <thead class="bg-muted/50 text-left">
                     <tr>

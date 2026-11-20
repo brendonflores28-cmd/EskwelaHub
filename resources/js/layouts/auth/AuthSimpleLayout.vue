@@ -37,13 +37,13 @@ const onRegister = computed(() => path.value === '/register');
             role="dialog"
             aria-modal="true"
             :aria-label="title || 'Account'"
-            class="relative flex max-h-[calc(100svh-2rem)] w-full max-w-md flex-col overflow-hidden rounded-2xl bg-background text-foreground shadow-2xl ring-1 ring-black/10"
+            class="relative flex max-h-[calc(100svh-2rem)] w-full max-w-md flex-col overflow-hidden bg-background text-foreground shadow-xl border"
         >
             <div class="h-1.5 shrink-0 bg-gold"></div>
 
             <Link
                 :href="home()"
-                class="absolute top-4 right-3 rounded-full p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground"
+                class="absolute top-4 right-3 p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground"
                 aria-label="Close"
             >
                 <X class="size-5" />
@@ -60,12 +60,12 @@ const onRegister = computed(() => path.value === '/register');
                 </div>
 
                 <!-- Log in / Register tabs -->
-                <div v-if="showTabs" class="mt-6 grid grid-cols-2 rounded-lg bg-muted p-1 text-sm font-medium" role="tablist">
+                <div v-if="showTabs" class="mt-6 grid grid-cols-2 bg-muted p-1 text-sm font-medium" role="tablist">
                     <Link
                         :href="login()"
                         role="tab"
                         :aria-selected="!onRegister"
-                        :class="['rounded-md py-2 text-center transition', !onRegister ? 'bg-background text-primary shadow-sm' : 'text-muted-foreground hover:text-foreground']"
+                        :class="[' py-2 text-center transition', !onRegister ? 'bg-background text-primary shadow-sm' : 'text-muted-foreground hover:text-foreground']"
                     >
                         Log in
                     </Link>
@@ -73,7 +73,7 @@ const onRegister = computed(() => path.value === '/register');
                         :href="register()"
                         role="tab"
                         :aria-selected="onRegister"
-                        :class="['rounded-md py-2 text-center transition', onRegister ? 'bg-background text-primary shadow-sm' : 'text-muted-foreground hover:text-foreground']"
+                        :class="[' py-2 text-center transition', onRegister ? 'bg-background text-primary shadow-sm' : 'text-muted-foreground hover:text-foreground']"
                     >
                         Register
                     </Link>

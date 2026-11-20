@@ -7,7 +7,7 @@ defineProps<{ similar: { id: number; full_name: string; lrn: string | null; birt
 </script>
 
 <template>
-    <div v-if="similar.length" class="rounded-xl border border-amber-500/50 bg-amber-50 p-4 text-sm dark:bg-amber-950/30">
+    <div v-if="similar.length" class="border border-amber-500/50 bg-amber-50 p-4 text-sm dark:bg-amber-950/30">
         <div class="flex items-center gap-2 font-medium">
             <TriangleAlert class="size-4 text-amber-600" /> A similar record already exists
         </div>

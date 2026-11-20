@@ -85,7 +85,7 @@ function submit(): void {
 
             <div v-if="reading" class="text-sm">
                 Reading the image: {{ status }} {{ progress }}%
-                <div class="mt-1 h-2 w-full overflow-hidden rounded bg-muted">
+                <div class="mt-1 h-2 w-full overflow-hidden bg-muted">
                     <div class="h-full bg-primary transition-all" :style="{ width: progress + '%' }"></div>
                 </div>
                 <p class="mt-1 text-muted-foreground">The first scan downloads the language data and can take a minute.</p>

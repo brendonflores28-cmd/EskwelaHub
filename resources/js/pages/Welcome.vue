@@ -48,15 +48,15 @@ const steps = [
                     </span>
                 </Link>
                 <div class="flex items-center gap-1 text-sm">
-                    <a href="#services" class="hidden rounded-md px-3 py-2 hover:bg-muted md:block">Services</a>
-                    <a href="#process" class="hidden rounded-md px-3 py-2 hover:bg-muted md:block">How it works</a>
-                    <a href="#contact" class="hidden rounded-md px-3 py-2 hover:bg-muted md:block">Contact</a>
-                    <Link v-if="page.props.auth.user" :href="dashboard()" class="ml-2 rounded-md bg-primary px-4 py-2 font-medium text-primary-foreground hover:opacity-90">
+                    <a href="#services" class="hidden px-3 py-2 hover:bg-muted md:block">Services</a>
+                    <a href="#process" class="hidden px-3 py-2 hover:bg-muted md:block">How it works</a>
+                    <a href="#contact" class="hidden px-3 py-2 hover:bg-muted md:block">Contact</a>
+                    <Link v-if="page.props.auth.user" :href="dashboard()" class="ml-2 bg-primary px-4 py-2 font-medium text-primary-foreground hover:opacity-90">
                         Dashboard
                     </Link>
                     <template v-else>
-                        <Link :href="login()" class="ml-2 rounded-md border px-4 py-2 font-medium hover:bg-muted">Log in</Link>
-                        <Link :href="register()" class="rounded-md bg-primary px-4 py-2 font-medium text-primary-foreground hover:opacity-90">Register</Link>
+                        <Link :href="login()" class="ml-2 border px-4 py-2 font-medium hover:bg-muted">Log in</Link>
+                        <Link :href="register()" class="bg-primary px-4 py-2 font-medium text-primary-foreground hover:opacity-90">Register</Link>
                     </template>
                 </div>
             </nav>
@@ -79,10 +79,10 @@ const steps = [
                         Enroll your child, request school records and follow every step of your request, from your phone or computer.
                     </p>
                     <div class="mt-8 flex flex-wrap gap-3">
-                        <Link :href="page.props.auth.user ? '/my-enrollments/create' : register()" class="rounded-md bg-gold px-6 py-3 text-sm font-semibold text-[#0a3d14] shadow hover:brightness-105">
+                        <Link :href="page.props.auth.user ? '/my-enrollments/create' : register()" class="bg-gold px-6 py-3 text-sm font-semibold text-[#0a3d14] shadow hover:brightness-105">
                             Enroll Online
                         </Link>
-                        <Link :href="page.props.auth.user ? '/my-requests/create' : login()" class="rounded-md border border-white/70 px-6 py-3 text-sm font-semibold hover:bg-white/10">
+                        <Link :href="page.props.auth.user ? '/my-requests/create' : login()" class="border border-white/70 px-6 py-3 text-sm font-semibold hover:bg-white/10">
                             Request a Document
                         </Link>
                     </div>
@@ -98,7 +98,7 @@ const steps = [
                 <div class="mx-auto mt-3 h-px w-24 bg-gold"></div>
             </div>
             <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-                <article v-for="s in services" :key="s.title" class="rounded-sm border border-t-4 border-t-primary bg-card p-6 shadow-sm">
+                <article v-for="s in services" :key="s.title" class="border border-t-4 border-t-primary bg-card p-6 shadow-sm">
                     <component :is="s.icon" class="mb-4 size-8 text-primary" />
                     <h3 class="font-serif text-lg font-bold">{{ s.title }}</h3>
                     <p class="mt-2 text-sm leading-relaxed text-muted-foreground">{{ s.text }}</p>
@@ -115,7 +115,7 @@ const steps = [
                     <div class="mx-auto mt-3 h-px w-24 bg-gold"></div>
                 </div>
                 <ol class="grid gap-5 md:grid-cols-3">
-                    <li v-for="s in steps" :key="s.n" class="relative rounded-sm border bg-background p-6">
+                    <li v-for="s in steps" :key="s.n" class="relative border bg-background p-6">
                         <span class="font-serif text-4xl font-bold text-gold">{{ s.n }}</span>
                         <h3 class="mt-2 font-serif text-lg font-bold">{{ s.title }}</h3>
                         <p class="mt-1 text-sm text-muted-foreground">{{ s.text }}</p>

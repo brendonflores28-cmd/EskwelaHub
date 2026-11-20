@@ -16,7 +16,7 @@ defineProps<{
     <main class="mx-auto flex min-h-screen max-w-md flex-col justify-center gap-4 p-6">
         <p class="text-center text-sm text-muted-foreground">{{ school }}</p>
 
-        <div v-if="valid && document" class="rounded-xl border border-green-600/40 bg-green-50 p-6 text-center dark:bg-green-950/30">
+        <div v-if="valid && document" class="border border-green-600/40 bg-green-50 p-6 text-center dark:bg-green-950/30">
             <CircleCheck class="mx-auto size-12 text-green-600" />
             <h1 class="mt-2 text-xl font-semibold">This document is genuine</h1>
             <dl class="mt-4 space-y-1 text-left text-sm">
@@ -30,7 +30,7 @@ defineProps<{
             </p>
         </div>
 
-        <div v-else class="rounded-xl border border-red-600/40 bg-red-50 p-6 text-center dark:bg-red-950/30">
+        <div v-else class="border border-red-600/40 bg-red-50 p-6 text-center dark:bg-red-950/30">
             <CircleX class="mx-auto size-12 text-red-600" />
             <h1 class="mt-2 text-xl font-semibold">Document not found</h1>
             <p class="mt-2 text-sm text-muted-foreground">

@@ -56,7 +56,7 @@ const color: Record<string, string> = { positive: 'default', negative: 'destruct
 
         <div class="max-w-xs"><NativeSelect v-model="sentiment" :options="options" placeholder="All comments" /></div>
 
-        <div class="overflow-x-auto rounded-xl border">
+        <div class="overflow-x-auto border">
             <table class="w-full text-sm">
                 <thead class="bg-muted/50 text-left">
                     <tr>

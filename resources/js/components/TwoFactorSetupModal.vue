@@ -114,10 +114,10 @@ watch(
         <DialogContent class="sm:max-w-md">
             <DialogHeader class="flex items-center justify-center">
                 <div
-                    class="mb-3 w-auto rounded-full border border-border bg-card p-0.5 shadow-sm"
+                    class="mb-3 w-auto border border-border bg-card p-0.5 shadow-sm"
                 >
                     <div
-                        class="relative overflow-hidden rounded-full border border-border bg-muted p-2.5"
+                        class="relative overflow-hidden border border-border bg-muted p-2.5"
                     >
                         <div
                             class="absolute inset-0 grid grid-cols-5 opacity-50"
@@ -158,7 +158,7 @@ watch(
                             class="relative mx-auto flex max-w-md items-center overflow-hidden"
                         >
                             <div
-                                class="relative mx-auto aspect-square w-64 overflow-hidden rounded-lg border border-border"
+                                class="relative mx-auto aspect-square w-64 overflow-hidden border border-border"
                             >
                                 <div
                                     v-if="!qrCodeSvg"
@@ -205,7 +205,7 @@ watch(
                             class="flex w-full items-center justify-center space-x-2"
                         >
                             <div
-                                class="flex w-full items-stretch overflow-hidden rounded-xl border border-border"
+                                class="flex w-full items-stretch overflow-hidden border border-border"
                             >
                                 <div
                                     v-if="!manualSetupKey"

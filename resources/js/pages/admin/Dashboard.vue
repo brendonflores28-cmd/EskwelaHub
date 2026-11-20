@@ -170,7 +170,7 @@ const pct = (n: number) => Math.round((n / sentimentTotal.value) * 100);
                 </div>
                 <div class="space-y-2 text-sm">
                     <div class="text-muted-foreground">What people wrote (sentiment of comments)</div>
-                    <div class="flex h-4 overflow-hidden rounded bg-muted" role="img" :aria-label="`Positive ${pct(sentiment.positive)}%, neutral ${pct(sentiment.neutral)}%, negative ${pct(sentiment.negative)}%`">
+                    <div class="flex h-4 overflow-hidden bg-muted" role="img" :aria-label="`Positive ${pct(sentiment.positive)}%, neutral ${pct(sentiment.neutral)}%, negative ${pct(sentiment.negative)}%`">
                         <div class="bg-green-600" :style="{ width: pct(sentiment.positive) + '%' }"></div>
                         <div class="bg-gray-400" :style="{ width: pct(sentiment.neutral) + '%' }"></div>
                         <div class="bg-red-600" :style="{ width: pct(sentiment.negative) + '%' }"></div>

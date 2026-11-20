@@ -20,9 +20,9 @@ const barArea = computed(() => props.height ?? 160);
             <div v-for="item in items" :key="item.label" class="flex w-12 shrink-0 flex-col items-center justify-end gap-1">
                 <span class="text-xs font-medium">{{ item.value }}</span>
                 <div
-                    class="w-full rounded-t"
+                    class="w-full "
                     :class="[
-                        item.projected ? 'border border-dashed border-primary bg-primary/20' : item.highlight ? 'bg-primary' : 'bg-primary/70',
+ item.projected ? 'border border-dashed border-primary bg-primary/20' : item.highlight ? 'bg-primary' : 'bg-primary/70',
                     ]"
                     :style="{ height: Math.max(2, (item.value / max) * barArea) + 'px' }"
                     :title="`${item.label}: ${item.value}${item.projected ? ' (forecast)' : ''}`"

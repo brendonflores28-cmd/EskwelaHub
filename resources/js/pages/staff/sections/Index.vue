@@ -76,7 +76,7 @@ function save(): void {
                 <Button v-if="canManage" size="sm" variant="outline" @click="openAdd(g.grade)"><Plus class="size-4" /> Add section</Button>
             </CardHeader>
             <CardContent class="space-y-3">
-                <form v-if="adding === g.grade" class="grid gap-3 rounded-lg border p-3 md:grid-cols-4" @submit.prevent="save">
+                <form v-if="adding === g.grade" class="grid gap-3 border p-3 md:grid-cols-4" @submit.prevent="save">
                     <div v-if="g.grade >= 11" class="grid gap-1 md:col-span-4">
                         <Label>Strand</Label>
                         <NativeSelect v-model="form.strand" :options="strands.map((s) => ({ value: s.value, label: s.label }))" placeholder="Choose a strand" />
@@ -103,7 +103,7 @@ function save(): void {
                 </form>
 
                 <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                    <Link v-for="s in g.sections" :key="s.id" :href="`/staff/sections/${s.id}`" class="rounded-lg border p-3 transition hover:bg-muted/40">
+                    <Link v-for="s in g.sections" :key="s.id" :href="`/staff/sections/${s.id}`" class="border p-3 transition hover:bg-muted/40">
                         <div class="flex items-center gap-2 font-medium">
                             {{ s.name }}
                             <Badge v-if="s.strand_short" variant="secondary">{{ s.strand_short }}</Badge>

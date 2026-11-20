@@ -63,7 +63,7 @@ const toOptions = (items: string[]) => items.map((i) => ({ value: i, label: i })
             <NativeSelect v-model="event" :options="toOptions(events)" placeholder="All events" />
         </div>
 
-        <div class="overflow-x-auto rounded-xl border">
+        <div class="overflow-x-auto border">
             <table class="w-full text-sm">
                 <thead class="bg-muted/50 text-left">
                     <tr>

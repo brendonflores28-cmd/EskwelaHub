@@ -108,9 +108,9 @@ const rightNavItems: NavItem[] = [
                                         v-for="item in mainNavItems"
                                         :key="item.title"
                                         :href="item.href"
-                                        class="flex items-center gap-x-3 rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent"
+                                        class="flex items-center gap-x-3 px-3 py-2 text-sm font-medium hover:bg-accent"
                                         :class="
-                                            whenCurrentUrl(
+ whenCurrentUrl(
                                                 item.href,
                                                 activeItemStyles,
                                             )
@@ -163,7 +163,7 @@ const rightNavItems: NavItem[] = [
                             >
                                 <Link
                                     :class="[
-                                        navigationMenuTriggerStyle(),
+ navigationMenuTriggerStyle(),
                                         whenCurrentUrl(
                                             item.href,
                                             activeItemStyles,
@@ -243,10 +243,10 @@ const rightNavItems: NavItem[] = [
                             <Button
                                 variant="ghost"
                                 size="icon"
-                                class="relative size-10 w-auto rounded-full p-1 focus-within:ring-2 focus-within:ring-primary"
+                                class="relative size-10 w-auto p-1 focus-within:ring-2 focus-within:ring-primary"
                             >
                                 <Avatar
-                                    class="size-8 overflow-hidden rounded-full"
+                                    class="size-8 overflow-hidden "
                                 >
                                     <AvatarImage
                                         v-if="auth.user.avatar"
@@ -254,7 +254,7 @@ const rightNavItems: NavItem[] = [
                                         :alt="auth.user.name"
                                     />
                                     <AvatarFallback
-                                        class="rounded-lg bg-neutral-200 font-semibold text-black dark:bg-neutral-700 dark:text-white"
+                                        class="bg-neutral-200 font-semibold text-black dark:bg-neutral-700 dark:text-white"
                                     >
                                         {{ getInitials(auth.user?.name) }}
                                     </AvatarFallback>

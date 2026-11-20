@@ -80,11 +80,11 @@ const pending = props.draft.status === 'pending';
             <Card>
                 <CardHeader><CardTitle>Scan</CardTitle></CardHeader>
                 <CardContent class="space-y-3">
-                    <img v-if="draft.is_image" :src="draft.scan_url" alt="Scanned record" class="max-h-[600px] w-full rounded border object-contain" />
+                    <img v-if="draft.is_image" :src="draft.scan_url" alt="Scanned record" class="max-h-[600px] w-full border object-contain" />
                     <a v-else :href="draft.scan_url" target="_blank" class="underline">Open the PDF</a>
                     <details>
                         <summary class="cursor-pointer text-sm text-muted-foreground">Text found by OCR</summary>
-                        <pre class="mt-2 max-h-60 overflow-auto rounded bg-muted p-2 text-xs whitespace-pre-wrap">{{ draft.raw_text || '(no text found: type the record by hand)' }}</pre>
+                        <pre class="mt-2 max-h-60 overflow-auto bg-muted p-2 text-xs whitespace-pre-wrap">{{ draft.raw_text || '(no text found: type the record by hand)' }}</pre>
                     </details>
                 </CardContent>
             </Card>

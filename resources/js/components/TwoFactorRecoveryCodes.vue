@@ -81,7 +81,7 @@ onMounted(async () => {
             </div>
             <div
                 :class="[
-                    'relative overflow-hidden transition-all duration-300',
+ 'relative overflow-hidden transition-all duration-300',
                     isRecoveryCodesVisible
                         ? 'h-auto opacity-100'
                         : 'h-0 opacity-0',
@@ -93,13 +93,13 @@ onMounted(async () => {
                 <div v-else class="mt-3 space-y-3">
                     <div
                         ref="recoveryCodeSectionRef"
-                        class="grid gap-1 rounded-lg bg-muted p-4 font-mono text-sm"
+                        class="grid gap-1 bg-muted p-4 font-mono text-sm"
                     >
                         <div v-if="!recoveryCodesList.length" class="space-y-2">
                             <div
                                 v-for="n in 8"
                                 :key="n"
-                                class="h-4 animate-pulse rounded bg-muted-foreground/20"
+                                class="h-4 animate-pulse bg-muted-foreground/20"
                             ></div>
                         </div>
                         <div
