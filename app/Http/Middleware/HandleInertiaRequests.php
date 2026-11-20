@@ -38,6 +38,7 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'name' => config('app.name'),
+            'school' => config('eskwelahub.school'),
             'auth' => [
                 'user' => $request->user(),
                 // Used by the sidebar to show the right menu. Real checks stay on the server.

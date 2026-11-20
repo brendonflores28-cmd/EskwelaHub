@@ -24,11 +24,18 @@
     </style>
 </head>
 <body>
-    <div class="center">
-        <p class="muted" style="margin:0">Republic of the Philippines - Department of Education</p>
-        <p class="school">{{ $school }}</p>
-        <p class="muted" style="margin:0">{{ $location }}</p>
-    </div>
+    <table class="plain" style="margin-bottom:4px">
+        <tr>
+            <td width="80"><img src="{{ $logo }}" alt="School seal" style="width:68px;height:68px"></td>
+            <td class="center">
+                <p class="muted" style="margin:0">Republic of the Philippines - Department of Education</p>
+                <p class="school">{{ $school }}</p>
+                <p class="muted" style="margin:0">{{ $address }}</p>
+                <p class="muted" style="margin:0">{{ $district }} - School ID {{ $schoolId }}</p>
+            </td>
+            <td width="80"></td>
+        </tr>
+    </table>
 
     <h1 class="center">{{ $request->document_type->pdfTitle() }}</h1>
 

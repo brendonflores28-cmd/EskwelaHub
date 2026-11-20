@@ -26,8 +26,12 @@ class DocumentPdfGenerator
             'request' => $request,
             'student' => $request->student,
             'qr' => $this->qr->dataUri(route('verify', $request->verification_token)),
-            'school' => config('eskwelahub.school_name'),
-            'location' => config('eskwelahub.school_location'),
+            'school' => config('eskwelahub.school.name'),
+            'address' => config('eskwelahub.school.address'),
+            'district' => config('eskwelahub.school.district'),
+            'schoolId' => config('eskwelahub.school.school_id'),
+            // The seal is embedded in the PDF as data, so the PDF never needs a web address to show it.
+            'logo' => 'data:image/png;base64,'.base64_encode(file_get_contents(public_path('images/cnhs-logo-256.png'))),
             'issuedAt' => now(),
         ])->setPaper('a4')->output();
 

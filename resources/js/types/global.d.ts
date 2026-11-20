@@ -18,6 +18,18 @@ declare module '@inertiajs/core' {
     export interface InertiaConfig {
         sharedPageProps: {
             name: string;
+            /** Public details of the school (config/eskwelahub.php). */
+            school: {
+                name: string;
+                short_name: string;
+                school_id: string;
+                address: string;
+                phone: string;
+                email: string;
+                district: string;
+                facebook: string;
+                established_by: string;
+            };
             auth: Auth;
             sidebarOpen: boolean;
             [key: string]: unknown;

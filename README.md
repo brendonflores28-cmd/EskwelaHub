@@ -1,4 +1,4 @@
-# EskwelaHub
+﻿# EskwelaHub
 
 Integrated school portal for **Cawayan National High School** (Bongabong, Oriental Mindoro).
 Capstone project. Student records are personal data of minors, so the app follows RA 10173:
@@ -70,7 +70,7 @@ The page tests read the built assets, so run `npm run build` after changing any 
 |---|---|---|
 | Roles and policies | `app/Policies`, `database/seeders/RolePermissionSeeder.php` | `student_parent`, `staff`, `admin`. Parents see only records staff linked to their account. |
 | Student records and search | `app/Services/Search`, `app/Support/NameIndex.php` | LRN, name (typo tolerant), school year. Plain query builder, ranking in PHP. |
-| Document requests | `app/Services/Requests/RequestWorkflow.php` | `submitted → under_review → approved → processing → ready → released` or `rejected`. History, audit log, email. |
+| Document requests | `app/Services/Requests/RequestWorkflow.php` | `submitted â†’ under_review â†’ approved â†’ processing â†’ ready â†’ released` or `rejected`. History, audit log, email. |
 | PDF with QR | `app/Services/Documents`, `resources/views/pdf` | Built in the queue, stored in `storage/app/private`. QR opens the public `/verify/{token}` page. |
 | Secure files | `SecureFileUrl`, `DocumentDownloadController` | Policy check, then a 2-minute signed link, both logged. No file is ever in `public/`. |
 | Class sections | `app/Http/Controllers/Staff/SectionController.php` | Sections per grade and school year with adviser and optional capacity, class lists (printable), move learners in and out, pick a section when approving an online enrollment. A full section refuses more learners. |
@@ -95,6 +95,10 @@ php artisan eskwelahub:create-user principal@example.com admin --name="Full Name
 ```
 
 See [DEPLOY.md](DEPLOY.md) for the Hostinger steps.
+
+## For the school and your group
+
+See [docs/SCHOOL_INFO_NEEDED.md](docs/SCHOOL_INFO_NEEDED.md) for what is already known about the school and the checklist of information the school office still has to give.
 
 ## Data rules
 
