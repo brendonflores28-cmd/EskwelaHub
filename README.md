@@ -79,12 +79,12 @@ The page tests read the built assets, so run `npm run build` after changing any 
 | OCR digitization | `app/Contracts/OcrEngine.php`, `app/Services/Ocr` | Default: Tesseract.js in the staff member's browser (nothing sent to a third party). Optional: OCR.space API (`OCR_DRIVER=ocr_space`). Staff always check the fields before a record exists. |
 | Duplicate and incomplete records | `app/Services/Duplicates` | Same birthdate and similar name. Nightly job, "Check now" button, merge keeps all history. |
 | Survey and sentiment | `app/Contracts/SentimentAnalyzer.php`, `resources/lexicon` | English and Tagalog word lists, negation and intensifiers. Replace the class to use an AI API. |
-| FAQ chatbot | `app/Contracts/ChatbotResponder.php`, `FaqSeeder` | Rule based, English and Tagalog. Replace the class to use a language model. **The school must review the FAQ answers.** |
+| FAQ chatbot (floating assistant) | `resources/js/components/ChatWidget.vue`, `app/Contracts/ChatbotResponder.php`, `FaqSeeder` | Rule based, English and Tagalog. Replace the class to use a language model. **The school must review the FAQ answers.** |
 | Principal dashboard | `app/Services/Reports` | Enrollment, requests, graduates, satisfaction, forecast. |
 | Forecast | `app/Support/LinearRegression.php`, `EnrollmentForecaster` | Least squares in PHP over the last 10 finished school years (at least 3 needed). |
 | Excel export | `app/Exports` | One workbook, one sheet per topic. Principal only, logged. |
 
-Pages for visitors: home, `/help` (FAQ and chatbot), `/verify/{token}`. Everything else needs a login.
+Pages for visitors: home and `/verify/{token}`. A floating help assistant (round button, bottom right) is on every page. Everything else needs a login.
 
 ## Create the first admin on a real server
 

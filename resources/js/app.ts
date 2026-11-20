@@ -1,4 +1,6 @@
 import { createInertiaApp } from '@inertiajs/vue3';
+import { createApp } from 'vue';
+import ChatWidget from '@/components/ChatWidget.vue';
 import { initializeTheme } from '@/composables/useAppearance';
 import AppLayout from '@/layouts/AppLayout.vue';
 import AuthLayout from '@/layouts/AuthLayout.vue';
@@ -41,3 +43,9 @@ initializeTheme();
 
 // This will listen for flash toast data from the server...
 initializeFlashToast();
+
+// Floating help assistant, shown on every page (also for visitors who are not logged in).
+// It is its own small Vue app, so it stays in place while Inertia changes pages.
+const chatRoot = document.createElement('div');
+document.body.appendChild(chatRoot);
+createApp(ChatWidget).mount(chatRoot);

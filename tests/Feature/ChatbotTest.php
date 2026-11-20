@@ -75,12 +75,6 @@ it('is rate limited', function () {
     ask($this, 'form 137')->assertStatus(429);
 });
 
-it('shows the public help page to guests with the FAQ list', function () {
-    $this->get(route('help'))
-        ->assertOk()
-        ->assertInertia(fn ($page) => $page->component('public/Help')->has('faqs', FaqEntry::count()));
-});
-
 it('can be replaced through the interface (for example with a language model)', function () {
     app()->bind(ChatbotResponder::class, fn () => new class implements ChatbotResponder
     {

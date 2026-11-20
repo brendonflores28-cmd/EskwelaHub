@@ -24,8 +24,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::inertia('/', 'Welcome')->name('home');
 
-// Public help page and FAQ chatbot (no login, no personal data).
-Route::get('help', [ChatbotController::class, 'page'])->name('help');
+// FAQ chatbot used by the floating help assistant (no login, no personal data).
 Route::post('chatbot', [ChatbotController::class, 'ask'])->middleware('throttle:20,1')->name('chatbot.ask');
 
 // Opened by the QR code on a document. Public, but it shows no personal data.

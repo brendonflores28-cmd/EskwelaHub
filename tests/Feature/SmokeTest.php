@@ -19,7 +19,7 @@ beforeEach(function () {
 
 it('opens every public page', function (string $route) {
     $this->get(route($route))->assertOk();
-})->with(['home', 'help', 'login', 'register']);
+})->with(['home', 'login', 'register']);
 
 it('opens every page for a parent', function () {
     $student = Student::factory()->create();
