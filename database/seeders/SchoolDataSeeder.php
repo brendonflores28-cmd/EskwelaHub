@@ -65,8 +65,8 @@ class SchoolDataSeeder extends Seeder
     private function seedCohort(int $entryYear, array $years, int $currentStart): void
     {
         // Before the K to 12 program the school ran Grades 7-10 (1st to 4th year).
-        $isK12 = $entryYear >= 2016;
-        $lastGrade = $isK12 ? 12 : 10;
+        $isK12 = $entryYear >= Curriculum::K12_FIRST_ENTRY_YEAR;
+        $lastGrade = $isK12 ? 12 : 10; // K to 12 learners finish Grade 12 (senior high school)
         $hasLrn = $entryYear >= 2012;
 
         for ($i = 0; $i < self::COHORT_SIZE; $i++) {
@@ -90,6 +90,9 @@ class SchoolDataSeeder extends Seeder
                     'school_year_id' => $years[$schoolYearStart]->id,
                     'grade_level' => $grade,
                     'name' => self::SECTIONS[$i % count(self::SECTIONS)],
+                ], [
+                    // Fake adviser names, only used when the section is first created.
+                    'adviser_name' => fake()->randomElement(['Ms.', 'Mr.', 'Mrs.']).' '.fake()->lastName(),
                 ]);
 
                 $student->enrollments()->create([

@@ -16,6 +16,7 @@ use App\Http\Controllers\Staff\EnrollmentApplicationController;
 use App\Http\Controllers\Staff\LinkRequestController;
 use App\Http\Controllers\Staff\OcrController;
 use App\Http\Controllers\Staff\RecordAlertsController;
+use App\Http\Controllers\Staff\SectionController;
 use App\Http\Controllers\Staff\StudentController;
 use App\Http\Controllers\Staff\StudentEnrollmentController;
 use App\Http\Controllers\VerifyDocumentController;
@@ -127,6 +128,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 ->name('students.enrollments.destroy');
             Route::put('students/{student}/graduation', [StudentEnrollmentController::class, 'graduation'])
                 ->name('students.graduation');
+
+            // Class sections: list per grade, class lists, move learners in and out.
+            Route::get('sections', [SectionController::class, 'index'])->name('sections.index');
+            Route::post('sections', [SectionController::class, 'store'])->name('sections.store');
+            Route::get('sections/{section}', [SectionController::class, 'show'])->name('sections.show');
+            Route::put('sections/{section}', [SectionController::class, 'update'])->name('sections.update');
+            Route::delete('sections/{section}', [SectionController::class, 'destroy'])->name('sections.destroy');
+            Route::post('sections/{section}/assign', [SectionController::class, 'assign'])->name('sections.assign');
+            Route::post('sections/{section}/unassign', [SectionController::class, 'unassign'])->name('sections.unassign');
 
             // Alerts: possible duplicates and incomplete records.
             Route::get('alerts', [RecordAlertsController::class, 'index'])->name('alerts.index');

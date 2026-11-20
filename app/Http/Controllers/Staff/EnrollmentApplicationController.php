@@ -7,6 +7,7 @@ use App\Exceptions\InvalidRequestTransition;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\EnrollmentResource;
 use App\Models\EnrollmentApplication;
+use App\Models\Section;
 use App\Services\Duplicates\DuplicateDetector;
 use App\Services\Enrollment\EnrollmentWorkflow;
 use Illuminate\Http\RedirectResponse;
@@ -48,6 +49,14 @@ class EnrollmentApplicationController extends Controller
         return Inertia::render('staff/enrollments/Show', [
             'application' => new EnrollmentResource($application),
             'open' => $application->status->isOpen(),
+            // Sections of the learner's grade this school year, to choose one when approving.
+            'sections' => Section::where('school_year_id', $application->school_year_id)
+                ->where('grade_level', $application->grade_level)->withCount('enrollments')->orderBy('name')->get()
+                ->map(fn (Section $s) => [
+                    'id' => $s->id,
+                    'label' => $s->name.($s->capacity ? " ({$s->enrollments_count}/{$s->capacity})" : " ({$s->enrollments_count})"),
+                    'full' => $s->capacity !== null && $s->enrollments_count >= $s->capacity,
+                ]),
             // Records already in the system that look like this learner (avoid creating a duplicate).
             'similar' => $application->status->isOpen()
                 ? $detector->similarTo($application->last_name, $application->first_name, $application->birthdate->toDateString())
@@ -63,9 +72,14 @@ class EnrollmentApplicationController extends Controller
 
     public function approve(Request $request, EnrollmentApplication $application): RedirectResponse
     {
-        $note = $request->validate(['note' => ['nullable', 'string', 'max:500']])['note'] ?? null;
+        $data = $request->validate([
+            'note' => ['nullable', 'string', 'max:500'],
+            'section_id' => ['nullable', 'integer'], // optional: put the learner straight into a class section
+        ]);
 
-        return $this->act($application, 'Approved. The student record was created and linked.', fn () => $this->workflow->approve($application, auth()->user(), $note));
+        return $this->act($application, 'Approved. The student record was created and linked.', fn () => $this->workflow->approve(
+            $application, auth()->user(), $data['note'] ?? null, $data['section_id'] ?? null,
+        ));
     }
 
     public function reject(Request $request, EnrollmentApplication $application): RedirectResponse

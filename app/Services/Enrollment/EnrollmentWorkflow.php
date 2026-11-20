@@ -10,6 +10,7 @@ use App\Enums\StudentStatus;
 use App\Exceptions\InvalidRequestTransition;
 use App\Models\EnrollmentApplication;
 use App\Models\SchoolYear;
+use App\Models\Section;
 use App\Models\Student;
 use App\Models\StudentLink;
 use App\Models\User;
@@ -18,6 +19,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 /**
  * Online enrollment: submit the form with documents, staff review, then
@@ -63,9 +65,19 @@ class EnrollmentWorkflow
     }
 
     /** Creates (or finds) the student, enrolls them for the school year and links the applicant's account. */
-    public function approve(EnrollmentApplication $application, User $staff, ?string $note = null): EnrollmentApplication
+    public function approve(EnrollmentApplication $application, User $staff, ?string $note = null, ?int $sectionId = null): EnrollmentApplication
     {
-        return $this->decide($application, $staff, EnrollmentStatus::Approved, $note, 'approved', 'Approved the enrollment', function (EnrollmentApplication $a) use ($staff): void {
+        // The section (optional) must be one of this school year and grade.
+        $section = $sectionId ? Section::where('school_year_id', $application->school_year_id)
+            ->where('grade_level', $application->grade_level)->find($sectionId) : null;
+        if ($sectionId && ! $section) {
+            throw ValidationException::withMessages(['section_id' => 'Choose a section of the same grade and school year.']);
+        }
+        if ($section && $section->seatsLeft() === 0) {
+            throw ValidationException::withMessages(['section_id' => "{$section->display_name} is full."]);
+        }
+
+        return $this->decide($application, $staff, EnrollmentStatus::Approved, $note, 'approved', 'Approved the enrollment', function (EnrollmentApplication $a) use ($staff, $section): void {
             // A learner who already has a record (same LRN, for example a transferee) is reused, not duplicated.
             $student = $a->lrn ? Student::where('lrn', $a->lrn)->first() : null;
 
@@ -83,7 +95,13 @@ class EnrollmentWorkflow
 
             $student->enrollments()->updateOrCreate(
                 ['school_year_id' => $a->school_year_id],
-                ['grade_level' => $a->grade_level, 'curriculum' => Curriculum::K12, 'status' => StudentStatus::Enrolled],
+                [
+                    'grade_level' => $a->grade_level,
+                    'curriculum' => Curriculum::K12, // every new enrollment follows DepEd's K to 12 curriculum
+                    'status' => StudentStatus::Enrolled,
+                    // Only set when staff chose one: an existing enrollment keeps the section it already has.
+                    ...($section ? ['section_id' => $section->id] : []),
+                ],
             );
 
             // The parent or learner who applied can now see the record and request documents.

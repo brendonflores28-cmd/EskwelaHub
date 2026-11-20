@@ -73,6 +73,8 @@ The page tests read the built assets, so run `npm run build` after changing any 
 | Document requests | `app/Services/Requests/RequestWorkflow.php` | `submitted → under_review → approved → processing → ready → released` or `rejected`. History, audit log, email. |
 | PDF with QR | `app/Services/Documents`, `resources/views/pdf` | Built in the queue, stored in `storage/app/private`. QR opens the public `/verify/{token}` page. |
 | Secure files | `SecureFileUrl`, `DocumentDownloadController` | Policy check, then a 2-minute signed link, both logged. No file is ever in `public/`. |
+| Class sections | `app/Http/Controllers/Staff/SectionController.php` | Sections per grade and school year with adviser and optional capacity, class lists (printable), move learners in and out, pick a section when approving an online enrollment. A full section refuses more learners. |
+| Curriculum | `app/Enums/Curriculum.php` | Every new enrollment is **K to 12** (DepEd's current curriculum). BEC exists only for old records: Grade 7 entrants before school year 2012-2013. Staff can leave the curriculum empty and it is worked out. |
 | Online enrollment | `app/Services/Enrollment` | Grade 7 and transferees, document upload, registrar approval creates or links the student and the parent's account. |
 | OCR digitization | `app/Contracts/OcrEngine.php`, `app/Services/Ocr` | Default: Tesseract.js in the staff member's browser (nothing sent to a third party). Optional: OCR.space API (`OCR_DRIVER=ocr_space`). Staff always check the fields before a record exists. |
 | Duplicate and incomplete records | `app/Services/Duplicates` | Same birthdate and similar name. Nightly job, "Check now" button, merge keeps all history. |

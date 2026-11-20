@@ -32,7 +32,7 @@ const enrollment = useForm({
     school_year_id: props.schoolYears[0]?.id ?? '',
     grade_level: 7,
     section: '',
-    curriculum: 'k12',
+    curriculum: '',
     status: 'enrolled',
     general_average: '',
 });
@@ -138,7 +138,7 @@ function archive(): void {
                     </div>
                     <div class="grid gap-1">
                         <Label>Curriculum</Label>
-                        <NativeSelect v-model="enrollment.curriculum" :options="curricula" />
+                        <NativeSelect v-model="enrollment.curriculum" :options="curricula" placeholder="Automatic" />
                     </div>
                     <div class="grid gap-1">
                         <Label>Average</Label>

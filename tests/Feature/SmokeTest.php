@@ -54,7 +54,7 @@ it('opens every staff page for staff', function () {
         route('staff.requests.index'), route('staff.requests.show', $request),
         route('staff.enrollments.index'), route('staff.enrollments.show', $application),
         route('staff.ocr.index'), route('staff.ocr.create'),
-        route('staff.alerts.index'), route('staff.links.index'),
+        route('staff.alerts.index'), route('staff.links.index'), route('staff.sections.index'),
     ] as $url) {
         $this->get($url)->assertOk();
     }
@@ -72,7 +72,7 @@ it('keeps parents out of every staff and admin page', function (string $route) {
     $this->actingAs(parentUser())->get(route($route))->assertForbidden();
 })->with([
     'staff.students.index', 'staff.requests.index', 'staff.enrollments.index', 'staff.ocr.index', 'staff.ocr.create',
-    'staff.alerts.index', 'staff.links.index', 'admin.audit-log', 'admin.surveys', 'admin.dashboard.export',
+    'staff.alerts.index', 'staff.links.index', 'staff.sections.index', 'admin.audit-log', 'admin.surveys', 'admin.dashboard.export',
 ]);
 
 it('keeps staff out of the principal-only pages', function (string $route) {

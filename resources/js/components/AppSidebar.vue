@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Link, usePage } from '@inertiajs/vue3';
-import { CircleHelp, ClipboardList, FileText, GraduationCap, LayoutGrid, MessageSquareText, ScanLine, ScrollText, TriangleAlert, UserCheck, UserPlus } from '@lucide/vue';
+import { CircleHelp, ClipboardList, FileText, GraduationCap, LayoutGrid, LayoutList, MessageSquareText, ScanLine, ScrollText, TriangleAlert, UserCheck, UserPlus } from '@lucide/vue';
 import { computed } from 'vue';
 import AppLogo from '@/components/AppLogo.vue';
 import NavMain from '@/components/NavMain.vue';
@@ -29,6 +29,9 @@ const mainNavItems = computed<NavItem[]>(() => {
 
     if (can.viewStudents) {
         items.push({ title: 'Student records', href: '/staff/students', icon: GraduationCap });
+    }
+    if (can.viewStudents) {
+        items.push({ title: 'Class sections', href: '/staff/sections', icon: LayoutList });
     }
     if (can.processRequests) {
         items.push({ title: 'Document requests', href: '/staff/requests', icon: FileText });

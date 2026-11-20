@@ -3,6 +3,7 @@ import { Head, Link, router, useForm } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import EnrollmentDetails from '@/components/EnrollmentDetails.vue';
 import InputError from '@/components/InputError.vue';
+import NativeSelect from '@/components/NativeSelect.vue';
 import SimilarRecords from '@/components/SimilarRecords.vue';
 import StatusBadge from '@/components/StatusBadge.vue';
 import { Button } from '@/components/ui/button';
@@ -15,6 +16,7 @@ const props = defineProps<{
     application: { data: EnrollmentForm };
     open: boolean;
     similar: { id: number; full_name: string; lrn: string | null; birthdate: string }[];
+    sections: { id: number; label: string; full: boolean }[];
 }>();
 const a = computed(() => props.application.data);
 const base = computed(() => `/staff/enrollments/${a.value.id}`);
@@ -23,7 +25,10 @@ defineOptions({
     layout: { breadcrumbs: [{ title: 'Enrollment forms', href: '/staff/enrollments' }] },
 });
 
-const decision = useForm({ note: '' });
+const decision = useForm({ note: '', section_id: '' as string | number });
+
+// Sections of the learner's grade. A full section cannot be picked.
+const sectionOptions = computed(() => props.sections.map((s) => ({ value: s.id, label: s.full ? `${s.label} - full` : s.label })));
 </script>
 
 <template>
@@ -56,6 +61,14 @@ const decision = useForm({ note: '' });
                     <Label for="note">Note to the applicant (required to reject)</Label>
                     <Input id="note" v-model="decision.note" maxlength="500" />
                     <InputError :message="decision.errors.note" />
+                </div>
+                <div class="grid max-w-xl gap-2">
+                    <Label>Class section (optional, you can also do it later in Class sections)</Label>
+                    <NativeSelect v-model="decision.section_id" :options="sectionOptions" placeholder="No section yet" />
+                    <p v-if="sections.length === 0" class="text-xs text-muted-foreground">
+                        There is no section for Grade {{ a.grade_level }} yet. Create one under Class sections.
+                    </p>
+                    <InputError :message="decision.errors.section_id" />
                 </div>
                 <div class="flex flex-wrap gap-2">
                     <Button v-if="a.status === 'submitted'" variant="outline" @click="router.post(`${base}/review`, {}, { preserveScroll: true })">

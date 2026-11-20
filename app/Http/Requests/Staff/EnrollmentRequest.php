@@ -22,7 +22,8 @@ class EnrollmentRequest extends FormRequest
             'school_year_id' => ['required', 'exists:school_years,id'],
             'grade_level' => ['required', 'integer', 'between:7,12'],
             'section' => ['nullable', 'string', 'max:60'],
-            'curriculum' => ['required', Rule::enum(Curriculum::class)],
+            // Optional: when empty it is worked out from the school year and grade (K to 12 for every current school year).
+            'curriculum' => ['nullable', Rule::enum(Curriculum::class)],
             'status' => ['required', Rule::enum(StudentStatus::class)],
             'general_average' => ['nullable', 'numeric', 'between:60,100'],
         ];

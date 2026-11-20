@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Staff;
 
+use App\Enums\Curriculum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Staff\EnrollmentRequest;
 use App\Http\Requests\Staff\GraduationRequest;
+use App\Models\SchoolYear;
 use App\Models\Section;
 use App\Models\Student;
 use App\Models\StudentEnrollment;
@@ -33,7 +35,8 @@ class StudentEnrollmentController extends Controller
             [
                 'section_id' => $sectionId,
                 'grade_level' => $data['grade_level'],
-                'curriculum' => $data['curriculum'],
+                'curriculum' => $data['curriculum']
+                    ?? Curriculum::forLevel(SchoolYear::findOrFail($data['school_year_id'])->start_year, (int) $data['grade_level']),
                 'status' => $data['status'],
                 'general_average' => $data['general_average'] ?? null,
             ],

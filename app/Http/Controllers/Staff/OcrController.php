@@ -156,7 +156,7 @@ class OcrController extends Controller
                 $student->enrollments()->create([
                     'school_year_id' => $year->id,
                     'grade_level' => $data['grade_level'],
-                    'curriculum' => $year->start_year >= 2016 ? Curriculum::K12 : Curriculum::Bec,
+                    'curriculum' => Curriculum::forLevel($year->start_year, (int) $data['grade_level']),
                     'status' => StudentStatus::Enrolled,
                     'general_average' => $data['general_average'] ?? null,
                 ]);
