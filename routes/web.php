@@ -2,13 +2,22 @@
 
 use App\Http\Controllers\Admin\AuditLogController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DocumentDownloadController;
+use App\Http\Controllers\Portal\DocumentRequestController as PortalDocumentRequestController;
 use App\Http\Controllers\Portal\MyRecordsController;
+use App\Http\Controllers\Staff\DocumentRequestController as StaffDocumentRequestController;
 use App\Http\Controllers\Staff\LinkRequestController;
 use App\Http\Controllers\Staff\StudentController;
 use App\Http\Controllers\Staff\StudentEnrollmentController;
+use App\Http\Controllers\VerifyDocumentController;
 use Illuminate\Support\Facades\Route;
 
 Route::inertia('/', 'Welcome')->name('home');
+
+// Opened by the QR code on a document. Public, but it shows no personal data.
+Route::get('verify/{token}', VerifyDocumentController::class)
+    ->middleware('throttle:30,1')
+    ->name('verify');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', DashboardController::class)->name('dashboard');
@@ -21,6 +30,35 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->name('link');
         Route::get('{student}', [MyRecordsController::class, 'show'])->name('records.show');
     });
+
+    // Document requests made by students / parents / alumni.
+    Route::prefix('my-requests')->name('portal.requests.')->group(function () {
+        Route::get('/', [PortalDocumentRequestController::class, 'index'])->name('index');
+        Route::get('create', [PortalDocumentRequestController::class, 'create'])->name('create');
+        Route::post('/', [PortalDocumentRequestController::class, 'store'])
+            ->middleware('throttle:10,1')
+            ->name('store');
+        Route::get('{documentRequest}', [PortalDocumentRequestController::class, 'show'])->name('show');
+    });
+
+    // PDF downloads: policy check, then a 2-minute signed link, both logged.
+    Route::get('documents/request/{documentRequest}', [DocumentDownloadController::class, 'request'])
+        ->name('documents.request');
+    Route::get('documents/file/{document}', [DocumentDownloadController::class, 'file'])
+        ->middleware('signed')
+        ->name('documents.file');
+
+    // Registrar: document requests.
+    Route::middleware(['permission:requests.view', 'two-factor'])
+        ->prefix('staff/requests')->name('staff.requests.')->group(function () {
+            Route::get('/', [StaffDocumentRequestController::class, 'index'])->name('index');
+            Route::get('{documentRequest}', [StaffDocumentRequestController::class, 'show'])->name('show');
+            Route::post('{documentRequest}/review', [StaffDocumentRequestController::class, 'review'])->name('review');
+            Route::post('{documentRequest}/approve', [StaffDocumentRequestController::class, 'approve'])->name('approve');
+            Route::post('{documentRequest}/reject', [StaffDocumentRequestController::class, 'reject'])->name('reject');
+            Route::post('{documentRequest}/release', [StaffDocumentRequestController::class, 'release'])->name('release');
+            Route::post('{documentRequest}/regenerate', [StaffDocumentRequestController::class, 'regenerate'])->name('regenerate');
+        });
 
     // Registrar / staff portal. Staff and admin must have 2FA turned on.
     Route::middleware(['permission:students.view', 'two-factor'])

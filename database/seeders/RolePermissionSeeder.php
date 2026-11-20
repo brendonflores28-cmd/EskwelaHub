@@ -24,6 +24,8 @@ class RolePermissionSeeder extends Seeder
             'students.delete',  // soft delete a record
             'links.review',     // approve or reject account-to-student link requests
             'audit.view',       // read the audit log
+            'requests.view',    // see all document requests
+            'requests.process', // review, approve, reject, release document requests
         ];
 
         foreach ($permissions as $name) {
@@ -33,7 +35,7 @@ class RolePermissionSeeder extends Seeder
         RoleModel::findOrCreate(Role::StudentParent->value, 'web');
 
         RoleModel::findOrCreate(Role::Staff->value, 'web')
-            ->syncPermissions(['students.view', 'students.manage', 'links.review']);
+            ->syncPermissions(['students.view', 'students.manage', 'links.review', 'requests.view', 'requests.process']);
 
         RoleModel::findOrCreate(Role::Admin->value, 'web')
             ->syncPermissions($permissions);

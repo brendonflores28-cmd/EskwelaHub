@@ -47,3 +47,23 @@ export type Paginated<T> = {
     links: { prev: string | null; next: string | null };
     meta: { current_page: number; last_page: number; total: number; from: number | null; to: number | null };
 };
+
+export type HistoryEntry = { to_status: string; by: string; note: string | null; at: string };
+
+export type DocumentRequest = {
+    id: number;
+    request_no: string;
+    document_type: string;
+    document_label: string;
+    purpose: string;
+    copies: number;
+    status: string;
+    status_label: string;
+    remarks: string | null;
+    created_at: string;
+    released_at: string | null;
+    student?: { id: number; full_name: string; lrn: string | null };
+    requester?: { name: string; email: string };
+    has_document?: boolean;
+    history?: HistoryEntry[];
+};

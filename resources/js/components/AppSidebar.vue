@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Link, usePage } from '@inertiajs/vue3';
-import { ClipboardList, GraduationCap, LayoutGrid, ScrollText, UserCheck } from '@lucide/vue';
+import { ClipboardList, FileText, GraduationCap, LayoutGrid, ScrollText, UserCheck } from '@lucide/vue';
 import { computed } from 'vue';
 import AppLogo from '@/components/AppLogo.vue';
 import NavMain from '@/components/NavMain.vue';
@@ -30,6 +30,9 @@ const mainNavItems = computed<NavItem[]>(() => {
     if (can.viewStudents) {
         items.push({ title: 'Student records', href: '/staff/students', icon: GraduationCap });
     }
+    if (can.processRequests) {
+        items.push({ title: 'Document requests', href: '/staff/requests', icon: FileText });
+    }
     if (can.reviewLinks) {
         items.push({ title: 'Link requests', href: '/staff/links', icon: UserCheck });
     }
@@ -38,6 +41,7 @@ const mainNavItems = computed<NavItem[]>(() => {
     }
     if (!can.viewStudents) {
         items.push({ title: 'My records', href: '/my-records', icon: ClipboardList });
+        items.push({ title: 'My requests', href: '/my-requests', icon: FileText });
     }
 
     return items;

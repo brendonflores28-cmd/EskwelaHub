@@ -20,6 +20,7 @@ const labels: Record<string, string> = {
     enrolled_now: 'Enrolled this school year',
     graduates: 'Graduates on file',
     pending_links: 'Pending link requests',
+    open_requests: 'Open document requests',
     linked_records: 'Linked records',
 };
 

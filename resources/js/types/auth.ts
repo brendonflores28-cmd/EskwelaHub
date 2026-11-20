@@ -18,6 +18,7 @@ export type Auth = {
         viewStudents: boolean;
         reviewLinks: boolean;
         viewAudit: boolean;
+        processRequests: boolean;
     };
 };
 

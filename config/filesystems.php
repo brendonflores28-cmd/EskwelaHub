@@ -38,6 +38,16 @@ return [
             'report' => false,
         ],
 
+        // Private files (uploads, generated documents). Never served directly:
+        // downloads go through signed, logged routes (see SecureFileUrl).
+        'private' => [
+            'driver' => 'local',
+            'root' => storage_path('app/private'),
+            'serve' => false,
+            'throw' => true,
+            'report' => false,
+        ],
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Enums\LinkStatus;
+use App\Enums\RequestStatus;
 use App\Enums\StudentStatus;
+use App\Models\DocumentRequest;
 use App\Models\SchoolYear;
 use App\Models\Student;
 use App\Models\StudentEnrollment;
@@ -40,6 +42,10 @@ class DashboardController extends Controller
                     : 0,
                 'graduates' => Student::where('status', StudentStatus::Graduated)->count(),
                 'pending_links' => StudentLink::where('status', LinkStatus::Pending)->count(),
+                'open_requests' => DocumentRequest::whereIn('status', [
+                    RequestStatus::Submitted, RequestStatus::UnderReview, RequestStatus::Approved,
+                    RequestStatus::Processing, RequestStatus::Ready,
+                ])->count(),
                 'school_year' => $current?->label,
             ],
         ]);
