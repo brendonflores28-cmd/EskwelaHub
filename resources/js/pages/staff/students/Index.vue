@@ -7,7 +7,7 @@ import SimplePagination from '@/components/SimplePagination.vue';
 import StatusBadge from '@/components/StatusBadge.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import type { Option, Paginated, SchoolYearOption, Student } from '@/types/records';
+import type { Enrollment, Option, Paginated, SchoolYearOption, Student } from '@/types/records';
 
 type Filters = {
     q: string;
@@ -53,6 +53,13 @@ watch(q, () => {
 });
 watch([schoolYear, grade, status], search);
 
+/** "2026-2027, Grade 11 STEM - STEM-A": one string, so the spaces are always right. */
+function enrollmentText(e: Enrollment): string {
+    const grade = `Grade ${e.grade_level}${e.strand_short ? ' ' + e.strand_short : ''}`;
+
+    return [e.school_year, e.section ? `${grade} - ${e.section}` : grade].filter(Boolean).join(', ');
+}
+
 const grades = [7, 8, 9, 10, 11, 12].map((g) => ({ value: g, label: `Grade ${g}` }));
 const yearOptions = props.schoolYears.map((y) => ({ value: y.id, label: y.label }));
 </script>
@@ -94,10 +101,7 @@ const yearOptions = props.schoolYears.map((y) => ({ value: y.id, label: y.label 
                         <td class="p-3">{{ s.lrn ?? 'No LRN' }}</td>
                         <td class="p-3">{{ s.birthdate }}</td>
                         <td class="p-3">
-                            <span v-if="s.latest_enrollment">
-                                {{ s.latest_enrollment.school_year }}, Grade {{ s.latest_enrollment.grade_level }}<span v-if="s.latest_enrollment.strand"> {{ s.latest_enrollment.strand_short }}</span>
-                                <span v-if="s.latest_enrollment.section">- {{ s.latest_enrollment.section }}</span>
-                            </span>
+                            <span v-if="s.latest_enrollment">{{ enrollmentText(s.latest_enrollment) }}</span>
                             <span v-else class="text-muted-foreground">None</span>
                         </td>
                         <td class="p-3"><StatusBadge :status="s.status" /></td>
