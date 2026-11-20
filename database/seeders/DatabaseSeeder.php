@@ -10,6 +10,7 @@ class DatabaseSeeder extends Seeder
     {
         // Roles and permissions are safe everywhere, including production.
         $this->call(RolePermissionSeeder::class);
+        $this->call(FaqSeeder::class); // chatbot answers: content, safe in production (the school must review them)
 
         // Fake students and demo accounts with a known password: local only.
         if (app()->isProduction()) {

@@ -2,9 +2,13 @@
 
 namespace App\Providers;
 
+use App\Contracts\ChatbotResponder;
 use App\Contracts\OcrEngine;
+use App\Contracts\SentimentAnalyzer;
+use App\Services\Chatbot\FaqChatbot;
 use App\Services\Ocr\BrowserOcrEngine;
 use App\Services\Ocr\OcrSpaceEngine;
+use App\Services\Sentiment\LexiconSentimentAnalyzer;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -19,6 +23,10 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         // The OCR engine is chosen by OCR_DRIVER in .env (see config/ocr.php).
+        // Swappable parts: replace these bindings to use an AI API (see config/sentiment.php, config/chatbot.php).
+        $this->app->bind(SentimentAnalyzer::class, LexiconSentimentAnalyzer::class);
+        $this->app->bind(ChatbotResponder::class, FaqChatbot::class);
+
         $this->app->bind(OcrEngine::class, fn () => match (config('ocr.driver')) {
             'ocr_space' => new OcrSpaceEngine,
             default => new BrowserOcrEngine,

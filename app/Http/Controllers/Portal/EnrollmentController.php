@@ -8,6 +8,7 @@ use App\Http\Requests\EnrollmentFormRequest;
 use App\Http\Resources\EnrollmentResource;
 use App\Models\EnrollmentApplication;
 use App\Models\SchoolYear;
+use App\Models\Survey;
 use App\Services\Enrollment\EnrollmentWorkflow;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -54,6 +55,9 @@ class EnrollmentController extends Controller
 
         return Inertia::render('portal/enrollments/Show', [
             'application' => new EnrollmentResource($application),
+            // Ask for feedback once, after the registrar decided.
+            'canSurvey' => ! $application->status->isOpen()
+                && ! Survey::where('user_id', request()->user()->id)->where('enrollment_application_id', $application->id)->exists(),
         ]);
     }
 }

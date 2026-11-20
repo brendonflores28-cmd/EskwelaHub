@@ -12,6 +12,7 @@ use App\Models\SchoolYear;
 use App\Models\Student;
 use App\Services\Audit\AuditLogger;
 use App\Services\Documents\SecureFileUrl;
+use App\Services\Duplicates\DuplicateDetector;
 use App\Services\Ocr\OcrTextParser;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -99,7 +100,7 @@ class OcrController extends Controller
         return to_route('staff.ocr.show', $draft);
     }
 
-    public function show(OcrDraft $draft, SecureFileUrl $urls): Response
+    public function show(OcrDraft $draft, SecureFileUrl $urls, DuplicateDetector $detector): Response
     {
         $draft->load('scan');
 
@@ -116,6 +117,9 @@ class OcrController extends Controller
                 'scan_url' => $urls->signed('scans.file', ['scan' => $draft->scan->id], 10),
             ],
             'schoolYears' => SchoolYear::orderByDesc('start_year')->get(['id', 'label']),
+            // Look-alike records that already exist: saving a draft may create a duplicate.
+            'similar' => $detector->similarTo($draft->parsed['last_name'] ?? null, $draft->parsed['first_name'] ?? null, $draft->parsed['birthdate'] ?? null)
+                ->map(fn ($s) => ['id' => $s->id, 'full_name' => $s->full_name, 'lrn' => $s->lrn, 'birthdate' => $s->birthdate->toDateString()]),
         ]);
     }
 

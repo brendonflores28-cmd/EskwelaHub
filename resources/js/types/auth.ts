@@ -21,6 +21,8 @@ export type Auth = {
         processRequests: boolean;
         reviewEnrollments: boolean;
         useOcr: boolean;
+        viewSurveys: boolean;
+        viewReports: boolean;
     };
 };
 

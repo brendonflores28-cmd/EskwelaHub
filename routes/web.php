@@ -1,22 +1,30 @@
 <?php
 
 use App\Http\Controllers\Admin\AuditLogController;
+use App\Http\Controllers\Admin\SurveyController as AdminSurveyController;
+use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentDownloadController;
 use App\Http\Controllers\EnrollmentDocumentController;
 use App\Http\Controllers\Portal\DocumentRequestController as PortalDocumentRequestController;
 use App\Http\Controllers\Portal\EnrollmentController;
 use App\Http\Controllers\Portal\MyRecordsController;
+use App\Http\Controllers\Portal\SurveyController;
 use App\Http\Controllers\Staff\DocumentRequestController as StaffDocumentRequestController;
 use App\Http\Controllers\Staff\EnrollmentApplicationController;
 use App\Http\Controllers\Staff\LinkRequestController;
 use App\Http\Controllers\Staff\OcrController;
+use App\Http\Controllers\Staff\RecordAlertsController;
 use App\Http\Controllers\Staff\StudentController;
 use App\Http\Controllers\Staff\StudentEnrollmentController;
 use App\Http\Controllers\VerifyDocumentController;
 use Illuminate\Support\Facades\Route;
 
 Route::inertia('/', 'Welcome')->name('home');
+
+// Public help page and FAQ chatbot (no login, no personal data).
+Route::get('help', [ChatbotController::class, 'page'])->name('help');
+Route::post('chatbot', [ChatbotController::class, 'ask'])->middleware('throttle:20,1')->name('chatbot.ask');
 
 // Opened by the QR code on a document. Public, but it shows no personal data.
 Route::get('verify/{token}', VerifyDocumentController::class)
@@ -51,6 +59,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('documents/file/{document}', [DocumentDownloadController::class, 'file'])
         ->middleware('signed')
         ->name('documents.file');
+
+    // Satisfaction survey after a finished transaction.
+    Route::post('my-requests/{documentRequest}/survey', [SurveyController::class, 'forRequest'])
+        ->middleware('throttle:10,1')->name('portal.requests.survey');
+    Route::post('my-enrollments/{application}/survey', [SurveyController::class, 'forEnrollment'])
+        ->middleware('throttle:10,1')->name('portal.enrollments.survey');
 
     // Online enrollment (parent or learner).
     Route::prefix('my-enrollments')->name('portal.enrollments.')->group(function () {
@@ -113,6 +127,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::put('students/{student}/graduation', [StudentEnrollmentController::class, 'graduation'])
                 ->name('students.graduation');
 
+            // Alerts: possible duplicates and incomplete records.
+            Route::get('alerts', [RecordAlertsController::class, 'index'])->name('alerts.index');
+            Route::post('alerts/scan', [RecordAlertsController::class, 'scan'])->name('alerts.scan');
+            Route::post('alerts/{flag}/dismiss', [RecordAlertsController::class, 'dismiss'])->name('alerts.dismiss');
+            Route::post('alerts/{flag}/merge', [RecordAlertsController::class, 'merge'])->name('alerts.merge');
+
             Route::get('links', [LinkRequestController::class, 'index'])->name('links.index');
             Route::post('links/{link}/approve', [LinkRequestController::class, 'approve'])->name('links.approve');
             Route::post('links/{link}/reject', [LinkRequestController::class, 'reject'])->name('links.reject');
@@ -122,6 +142,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware(['permission:audit.view', 'two-factor'])
         ->prefix('admin')->name('admin.')->group(function () {
             Route::get('audit-log', [AuditLogController::class, 'index'])->name('audit-log');
+        });
+
+    Route::middleware(['permission:surveys.view', 'two-factor'])
+        ->prefix('admin')->name('admin.')->group(function () {
+            Route::get('surveys', [AdminSurveyController::class, 'index'])->name('surveys');
         });
 });
 

@@ -7,6 +7,7 @@ use App\Exceptions\InvalidRequestTransition;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\EnrollmentResource;
 use App\Models\EnrollmentApplication;
+use App\Services\Duplicates\DuplicateDetector;
 use App\Services\Enrollment\EnrollmentWorkflow;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -38,7 +39,7 @@ class EnrollmentApplicationController extends Controller
         ]);
     }
 
-    public function show(EnrollmentApplication $application): Response
+    public function show(EnrollmentApplication $application, DuplicateDetector $detector): Response
     {
         $this->authorize('view', $application);
 
@@ -47,6 +48,11 @@ class EnrollmentApplicationController extends Controller
         return Inertia::render('staff/enrollments/Show', [
             'application' => new EnrollmentResource($application),
             'open' => $application->status->isOpen(),
+            // Records already in the system that look like this learner (avoid creating a duplicate).
+            'similar' => $application->status->isOpen()
+                ? $detector->similarTo($application->last_name, $application->first_name, $application->birthdate->toDateString())
+                    ->map(fn ($s) => ['id' => $s->id, 'full_name' => $s->full_name, 'lrn' => $s->lrn, 'birthdate' => $s->birthdate->toDateString()])
+                : [],
         ]);
     }
 

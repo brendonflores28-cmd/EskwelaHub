@@ -2,6 +2,7 @@
 import { Head, Link, router, useForm } from '@inertiajs/vue3';
 import InputError from '@/components/InputError.vue';
 import NativeSelect from '@/components/NativeSelect.vue';
+import SimilarRecords from '@/components/SimilarRecords.vue';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -32,6 +33,7 @@ const props = defineProps<{
         scan_url: string;
     };
     schoolYears: SchoolYearOption[];
+    similar: { id: number; full_name: string; lrn: string | null; birthdate: string }[];
 }>();
 
 defineOptions({
@@ -69,6 +71,8 @@ const pending = props.draft.status === 'pending';
                 {{ draft.file }}. The fields below are guesses from the scan. Compare them with the image and fix any mistake before saving.
             </p>
         </div>
+
+        <SimilarRecords :similar="similar" />
 
         <div class="grid gap-4 lg:grid-cols-2">
             <Card>

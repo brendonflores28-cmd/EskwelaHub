@@ -3,11 +3,12 @@ import { Head, Link } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import EnrollmentDetails from '@/components/EnrollmentDetails.vue';
 import StatusBadge from '@/components/StatusBadge.vue';
+import SurveyForm from '@/components/SurveyForm.vue';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { EnrollmentForm } from '@/types/records';
 
-const props = defineProps<{ application: { data: EnrollmentForm } }>();
+const props = defineProps<{ application: { data: EnrollmentForm }; canSurvey: boolean }>();
 const a = computed(() => props.application.data);
 
 defineOptions({
@@ -39,6 +40,8 @@ defineOptions({
                 <Button as-child><Link href="/my-records">Open my records</Link></Button>
             </CardContent>
         </Card>
+
+        <SurveyForm v-if="canSurvey" :action="`/my-enrollments/${a.id}/survey`" />
 
         <EnrollmentDetails :a="a" />
     </div>

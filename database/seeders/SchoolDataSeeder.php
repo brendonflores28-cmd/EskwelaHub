@@ -38,6 +38,15 @@ class SchoolDataSeeder extends Seeder
         foreach ($years as $entryYear => $_) {
             $this->seedCohort($entryYear, $years, $currentStart);
         }
+
+        // 3. A demo pair of look-alike records so the "Record alerts" page has something to show.
+        $original = Student::whereNotNull('lrn')->orderBy('id')->skip(20)->firstOrFail();
+        Student::factory()->create([
+            'last_name' => $original->last_name,
+            'first_name' => $original->first_name.'e',   // typo: "Mark" becomes "Marke"
+            'middle_name' => null,
+            'birthdate' => $original->birthdate->toDateString(),
+        ]);
     }
 
     /** School year starts in June: before June the current school year began last year. */

@@ -1,5 +1,6 @@
 <?php
 
+use App\Jobs\DetectDuplicates;
 use Illuminate\Support\Facades\Schedule;
 
 /*
@@ -16,3 +17,6 @@ Schedule::command('queue:work --stop-when-empty --max-time=50')
 
 // Remove audit entries older than the retention set in config/activitylog.php (5 years).
 Schedule::command('activitylog:clean')->daily();
+
+// Possible duplicate student records: checked every night, shown to staff as alerts.
+Schedule::job(new DetectDuplicates)->dailyAt('01:30');

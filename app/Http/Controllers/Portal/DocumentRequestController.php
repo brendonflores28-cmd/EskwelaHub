@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Portal;
 
 use App\Enums\DocumentType;
 use App\Enums\LinkStatus;
+use App\Enums\RequestStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DocumentRequestResource;
 use App\Models\DocumentRequest;
 use App\Models\Student;
+use App\Models\Survey;
 use App\Services\Requests\RequestWorkflow;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -73,6 +75,9 @@ class DocumentRequestController extends Controller
         return Inertia::render('portal/requests/Show', [
             'request' => new DocumentRequestResource($documentRequest),
             'canDownload' => request()->user()->can('download', $documentRequest) && $documentRequest->document !== null,
+            // Ask for feedback once, after the document was released.
+            'canSurvey' => $documentRequest->status === RequestStatus::Released
+                && ! Survey::where('user_id', request()->user()->id)->where('document_request_id', $documentRequest->id)->exists(),
         ]);
     }
 

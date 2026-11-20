@@ -4,11 +4,12 @@ import { Download } from '@lucide/vue';
 import { computed } from 'vue';
 import RequestTimeline from '@/components/RequestTimeline.vue';
 import StatusBadge from '@/components/StatusBadge.vue';
+import SurveyForm from '@/components/SurveyForm.vue';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { DocumentRequest } from '@/types/records';
 
-const props = defineProps<{ request: { data: DocumentRequest }; canDownload: boolean }>();
+const props = defineProps<{ request: { data: DocumentRequest }; canDownload: boolean; canSurvey: boolean }>();
 const r = computed(() => props.request.data);
 
 defineOptions({
@@ -45,6 +46,8 @@ defineOptions({
         <p v-else-if="r.status === 'ready'" class="text-sm text-muted-foreground">
             Your document is ready. You can download it as soon as the registrar releases it.
         </p>
+
+        <SurveyForm v-if="canSurvey" :action="`/my-requests/${r.id}/survey`" />
 
         <Card>
             <CardHeader><CardTitle>Details</CardTitle></CardHeader>

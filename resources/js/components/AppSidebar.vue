@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Link, usePage } from '@inertiajs/vue3';
-import { ClipboardList, FileText, GraduationCap, ScanLine, UserPlus, LayoutGrid, ScrollText, UserCheck } from '@lucide/vue';
+import { CircleHelp, ClipboardList, FileText, GraduationCap, LayoutGrid, MessageSquareText, ScanLine, ScrollText, TriangleAlert, UserCheck, UserPlus } from '@lucide/vue';
 import { computed } from 'vue';
 import AppLogo from '@/components/AppLogo.vue';
 import NavMain from '@/components/NavMain.vue';
@@ -42,6 +42,12 @@ const mainNavItems = computed<NavItem[]>(() => {
     if (can.reviewLinks) {
         items.push({ title: 'Account link approvals', href: '/staff/links', icon: UserCheck });
     }
+    if (can.viewStudents) {
+        items.push({ title: 'Record alerts', href: '/staff/alerts', icon: TriangleAlert });
+    }
+    if (can.viewSurveys) {
+        items.push({ title: 'Surveys', href: '/admin/surveys', icon: MessageSquareText });
+    }
     if (can.viewAudit) {
         items.push({ title: 'Audit log', href: '/admin/audit-log', icon: ScrollText });
     }
@@ -50,6 +56,8 @@ const mainNavItems = computed<NavItem[]>(() => {
         items.push({ title: 'My requests', href: '/my-requests', icon: FileText });
         items.push({ title: 'Enrollment', href: '/my-enrollments', icon: UserPlus });
     }
+
+    items.push({ title: 'Help', href: '/help', icon: CircleHelp });
 
     return items;
 });

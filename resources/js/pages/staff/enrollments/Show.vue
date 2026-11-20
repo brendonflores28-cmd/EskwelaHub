@@ -3,6 +3,7 @@ import { Head, Link, router, useForm } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import EnrollmentDetails from '@/components/EnrollmentDetails.vue';
 import InputError from '@/components/InputError.vue';
+import SimilarRecords from '@/components/SimilarRecords.vue';
 import StatusBadge from '@/components/StatusBadge.vue';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -10,7 +11,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import type { EnrollmentForm } from '@/types/records';
 
-const props = defineProps<{ application: { data: EnrollmentForm }; open: boolean }>();
+const props = defineProps<{
+    application: { data: EnrollmentForm };
+    open: boolean;
+    similar: { id: number; full_name: string; lrn: string | null; birthdate: string }[];
+}>();
 const a = computed(() => props.application.data);
 const base = computed(() => `/staff/enrollments/${a.value.id}`);
 
@@ -34,6 +39,8 @@ const decision = useForm({ note: '' });
             </div>
             <StatusBadge :status="a.status" />
         </div>
+
+        <SimilarRecords :similar="similar" />
 
         <Card v-if="a.student_id">
             <CardContent class="pt-6 text-sm">

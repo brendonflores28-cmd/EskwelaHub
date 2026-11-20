@@ -16,6 +16,9 @@ import { register } from '@/routes';
             class="mb-6 w-full max-w-[335px] text-sm not-has-[nav]:hidden lg:max-w-4xl"
         >
             <nav class="flex items-center justify-end gap-4">
+                <Link href="/help" class="inline-block px-3 py-1.5 text-sm leading-normal text-[#1b1b18] underline-offset-4 hover:underline dark:text-[#EDEDEC]">
+                    Help
+                </Link>
                 <Link
                     v-if="$page.props.auth.user"
                     :href="dashboard()"

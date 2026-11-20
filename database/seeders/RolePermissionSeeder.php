@@ -29,6 +29,9 @@ class RolePermissionSeeder extends Seeder
             'enrollments.view',     // see online enrollment forms
             'enrollments.process',  // review, approve, reject enrollment forms
             'ocr.use',              // upload scans and verify OCR drafts
+            'surveys.view',         // read satisfaction surveys (admin only)
+            'reports.view',         // principal dashboard with enrollment, requests, forecast (admin only)
+            'reports.export',       // download the dashboard as Excel (admin only)
         ];
 
         foreach ($permissions as $name) {
